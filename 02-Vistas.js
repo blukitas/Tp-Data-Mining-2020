@@ -130,48 +130,74 @@ db.createView(
     ]);
 db.tweet_users_original.find({});
 
+
+db.tweet_hashtags.drop();
+db.createView(
+    "tweet_hashtags",
+    "tweets_lower",
+    [{
+            $project: {
+                "_id": "$_id",
+                "user_id": "$user_id",
+                "hashtags": "$hashtags"
+            }
+        }, {
+            $unwind: "$hashtags"
+        }
+    ]);
+db.tweet_hashtags.find({});
+
+
+db.tweet_count_hashtags.drop();
+db.createView(
+    "tweet_count_hashtags",
+    "tweets_lower",
+    [{
+            $unwind: "$hashtags"
+        }, {
+            "$match": {
+                "hashtags": {
+                    "$ne": null
+                }
+            }
+        }, {
+            $group: {
+                _id: "$hashtags",
+                hashtag: { $min: "$hashtags" },
+                count: {
+                    $sum: 1
+                },
+            }
+        }, {
+            $sort: {
+                count: -1
+            }
+        }
+    ]);
+db.tweet_count_hashtags.find({});
+
+/* Vistas usadas para nube de palabras */
+db.tweet_cuba.drop();
+db.createView(
+    "tweet_cuba",
+    "tweets_lower",
+    [{"$match": { 'text' :/.cuba./}}]
+    );
+db.tweet_cuba.find({});
+
+db.tweet_mx.drop();
+db.createView(
+    "tweet_mx",
+    "tweets_lower",
+    [{"$match": { 'text' :/.m*xico./}}]
+    );
+db.tweet_mx.find({});
 
-db.tweet_hashtags.drop();
+
+db.tweet_vz.drop();
 db.createView(
-    "tweet_hashtags",
+    "tweet_vz",
     "tweets_lower",
-    [{
-            $project: {
-                "_id": "$_id",
-                "user_id": "$user_id",
-                "hashtags": "$hashtags"
-            }
-        }, {
-            $unwind: "$hashtags"
-        }
-    ]);
-db.tweet_hashtags.find({});
-
-
-db.tweet_count_hashtags.drop();
-db.createView(
-    "tweet_count_hashtags",
-    "tweets_lower",
-    [{
-            $unwind: "$hashtags"
-        }, {
-            "$match": {
-                "hashtags": {
-                    "$ne": null
-                }
-            }
-        }, {
-            $group: {
-                _id: "$hashtags",
-                hashtag: { $min: "$hashtags" },
-                count: {
-                    $sum: 1
-                },
-            }
-        }, {
-            $sort: {
-                count: -1
-            }
-        }
-    ]);
-db.tweet_count_hashtags.find({});
+    [{"$match": { 'text' :/.venezuela./}}]
+    );
+db.tweet_vz.find({});
