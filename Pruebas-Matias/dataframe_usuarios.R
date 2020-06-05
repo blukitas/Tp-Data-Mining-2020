@@ -18,7 +18,7 @@ library("twitteR")
 library("syuzhet")
 library("tidyverse")
 library("lubridate")
-library(RColorBrewer)
+library("RColorBrewer")
 
 # Ejecutar primero el archivo tweets_dataframe.R para obtener el df de partida df_tweets
 # deseo armar un dataframe a partir de diferentes agregaciones que me permita caracterizar a los usuarios
