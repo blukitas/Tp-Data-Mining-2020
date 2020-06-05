@@ -58,7 +58,7 @@ df_tweets$postsXyear <- postsXyear
 
 # creo la variable followers_friends_ratio como medida de POPULARIDAD
 #followers_friends_ratio <- as.numeric(df_tweets$followers_count + 1) / as.numeric(df_tweets$friends_count + 1)
-followers_friends_ratio <- as.numeric(df_tweets$followers_count) / as.numeric(df_tweets$friends_count + 1)
+followers_friends_ratio <- as.numeric(df_tweets$followers_count) / as.numeric(df_tweets$friends_count + 0.0001)
 df_tweets$followers_friends_ratio <- followers_friends_ratio
 #summary(df_tweets$followers_friends_ratio)
 #plot(sort(df_tweets$followers_friends_ratio))
