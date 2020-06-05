@@ -18,7 +18,7 @@ library("twitteR")
 library("syuzhet")
 library("tidyverse")
 library("lubridate")
-library(RColorBrewer)
+library("RColorBrewer")
 
 #collection se puede ver como esta estructurada en Vistas
 tweets <- mongo(collection = "tweetsCollection", db = "DMUBA")
@@ -47,7 +47,7 @@ class(fecha_creacion_cuenta)
 
 # Creo una columna nueva con el anio de creacion del usuario de cada tweet
 year_creacion_cuenta <- as.numeric(format(fecha_creacion_cuenta, "%Y"))
-df_tweets$created_at_year <- year_creacion_cuenta <- as.numeric(format(fecha_creacion_cuenta, "%Y"))
+df_tweets$created_at_year <- year_creacion_cuenta
 
 
 # Creo la variable postXyear posteos por anio como medida de ACTIVIDAD
