@@ -46,15 +46,15 @@ user_B <- aggregate(cbind(followers_friends_ratio,postsXyear) ~ screen_name + tw
 #nrow(user2_A) == nrow(user2_B)
 
 # join para formar un unico dataframe
-users <- right_join(user_A, user_B, by = c("screen_name", "tweet_type"))
+df_users <- right_join(user_A, user_B, by = c("screen_name", "tweet_type"))
 #names(users)
 #View(users)
 
 # creo una nueva variable que refleja la cantidad de url por tweet y la convierto en factor
-url_tweets_ratio <- floor(users$url_count / users$tweets)
-users$url_tweets_ratio <- as.factor(url_tweets_ratio)
+url_tweets_ratio <- floor(df_users$url_count / df_users$tweets)
+df_users$url_tweets_ratio <- as.factor(url_tweets_ratio)
 
 #convierto a tweet_type en factor
-users$tweet_type <- as.factor(users$tweet_type)
+df_users$tweet_type <- as.factor(df_users$tweet_type)
 
-#View(users)
+View(df_users)
