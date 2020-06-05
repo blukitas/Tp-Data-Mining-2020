@@ -201,3 +201,33 @@ db.createView(
     [{"$match": { 'text' :/.venezuela./}}]
     );
 db.tweet_vz.find({});
+
+db.tweets_mongo_covid19.aggregate(
+  [
+
+    {$project: {
+        "_id": 1,
+        "display_text_width": 1,
+        "screen_name": 1, 
+        "hashtags_count": { $cond: { if: {$anyElementTrue: [ "$hashtags" ]}, then: { $size: "$hashtags" } , else: 0 }}, 
+        "source":1, 
+        "is_quote":1, 
+        "is_retweet":1, 
+        "url_count" : { $cond: { if: {$anyElementTrue: [ "$urls_url" ]}, then: { $size: "$urls_url" } , else: 0 }},
+        "media_count" : { $cond: { if: {$anyElementTrue: [ "$media_url" ]}, then: { $size: "$media_url" } , else: 0 }},
+        "media_type": { $cond: { if: {$anyElementTrue: [ "$media_url" ]}, then: {"$arrayElemAt": ["$media_type", 0]}, else: "NA" }},
+        "verified": "$verified",
+        "followers_count":1,
+        "friends_count":1,
+        "account_created_at":1,
+        "listed_count":1,
+        "statuses_count":1,
+        "created_at" : 1,
+        "retweet_count": 1,
+        "favorite_count": 1,
+        }
+    },
+    
+    {$out: "tweetsCollection"}
+  ]
+)
