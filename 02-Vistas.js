@@ -14,75 +14,6 @@ db.createView(
     ])
 db.tweet_type.find({});
 
-db.fechas.drop();
-db.createView(
-    "fechas",
-    "tweets_lower",
-    [{
-            $project: {
-                "_id": "$_id",
-                "created_at": "$created_at",
-                "retweet_created_at": "$retweet_created_at",
-                "quoted_created_at": "$quoted_created_at",
-            }
-        }
-    ])
-db.fechas.find({});
-	
-db.user_estadisticas.drop();
-db.createView(
-    "user_estadisticas",
-    "users_mongo_covid19",
-    [{
-            $project: {
-                "_id": "$_id",
-                "statuses_count": "$statuses_count",
-                "favourites_count": "$favourites_count",
-                "listed_count": "$listed_count",
-                "friends_count": "$friends_count",
-                "followers_count": "$followers_count",
-                "verified": "$verified"
-            }
-        }
-    ])
-db.user_estadisticas.find({});
-
-db.tweet_estadisticas.drop();
-db.createView(
-    "tweet_estadisticas",
-    "tweets_lower",
-    [{
-            $project: {
-                "_id": "$_id",
-                "favorite_count": "$favorite_count",
-                "quote_count": "$quote_count",
-                "retweet_count": "$retweet_count",
-                "reply_count": "$reply_count",
-                "is_quote": "$is_quote",
-                "is_retweet": "$is_retweet",
-                "verified": "$verified"
-            }
-        }
-    ]);
-db.tweet_estadisticas.find({});
-
-db.tweet_original_estadisticas.drop();
-db.createView(
-    "tweet_original_estadisticas",
-    "tweets_lower",
-    [{
-            $project: {
-                "_id": "$_id",
-                "quoted_favorite_count": "$quoted_favorite_count",
-                "quoted_retweet_count": "$quoted_retweet_count",
-                "retweet_favorite_count": "$retweet_favorite_count",
-                "retweet_retweet_count": "$retweet_retweet_count",
-                "retweet_verified": "$retweet_verified",
-                "quoted_verified": "$quoted_verified"
-            }
-        }
-    ]);
-db.tweet_original_estadisticas.find({});
 
 db.tweet_completo_estadisticas.drop();
 db.createView(
@@ -108,6 +39,194 @@ db.createView(
         }
     ]);
 db.tweet_completo_estadisticas.find({});
+
+
+
+db.fechas.drop();
+db.createView(
+    "fechas",
+    "tweets_lower",
+    [{
+            $project: {
+                "_id": "$_id",
+                "created_at": "$created_at",
+                "retweet_created_at": "$retweet_created_at",
+                "quoted_created_at": "$quoted_created_at",
+            }
+        }
+    ])
+db.fechas.find({});
+	
+	
+
+db.user_estadisticas.drop();
+db.createView(
+    "user_estadisticas",
+    "users_mongo_covid19",
+    [
+        { $project: {
+            user_id: 1,
+            name: 1,
+            screen_name: 1,
+            followers_count: 1,
+            listed_count: 1,
+            friends_count: 1,
+            favourites_count: 1,
+            statuses_count: 1,
+            verified: 1,
+            description: 1,
+            account_created_at: 1, 
+            user_popularity: {
+                               $switch: {
+                                  branches: [
+                                     { case: { $lt: [ "$followers_count", 1001] }, then: "Impopular" },
+                                     { case: { $and: [
+                                                    { "$gt": ["$followers_count", 1000]},
+                                                    { "$lt": ["$followers_count", 3501 ]} 
+                                                    ]}, then: "Normal" },
+                                     { case: { "$gt": ["$followers_count", 3500] }, then: "Populares" }
+                                  ]
+                               }
+                            },
+//             user_impopular: {
+//                     $cond: [{ $lt: [ "$followers_count", 1001] }
+//                             , 1, 0]
+//                 },
+//             user_normal: {
+//                     $cond: [{
+//                             $and: [
+//                                 { "$gt": ["$followers_count", 1000]},
+//                                 { "$lt": ["$followers_count", 3501 ]} 
+//                                 ]}
+//                             , 1, 0]
+//                 },
+//             user_popular: {
+//                     $cond: [{ "$gt": ["$followers_count", 3500] } , 1, 0 ]
+//                 },
+        }}])
+db.user_estadisticas.find({});
+
+db.user_tweets_estadisticas.drop();
+db.createView(
+    "user_tweets_estadisticas",
+    "users_mongo_covid19",
+    [{
+            $project: {
+                "_id": "$_id",
+                "user_id": "$user_id",
+                "name": "$name",
+                "screen_name": "$screen_name",
+                "is_retweet": "$is_retweet",
+                "is_quote": "$is_quote",
+                is_rt: {
+                    $cond: ["$is_retweet", 1, 0]
+                },
+                is_qt: {
+                    $cond: ["$is_quote", 1, 0]
+                },
+                is_only_qt: {
+                    $cond: [{
+                            $and: ["$is_quote", {
+                                    $not: "$is_retweet"
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                },
+                is_only_rt: {
+                    $cond: [{
+                            $and: ["$is_retweet", {
+                                    $not: "$is_quote"
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                },
+                is_both: {
+                    $cond: [{ $and: ["$is_retweet", "$is_quote" ] }, 1, 0
+                    ]
+                },
+                is_none: {
+                    $cond: [{
+                            $and: [{
+                                    $not: "$is_retweet"
+                                }, {
+                                    $not: "$is_quote"
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                },
+            }
+        }, {
+            $group: {
+                _id: "$user_id",
+                name: {
+                    $max: "$name"
+                },
+                screen_name: {
+                    $max: "$screen_name"
+                },
+                is_rt: {
+                    $sum: "$is_rt"
+                },
+                is_qt: {
+                    $sum: "$is_qt"
+                },
+                is_only_rt: {
+                    $sum: "$is_only_rt"
+                },
+                is_only_qt: {
+                    $sum: "$is_only_qt"
+                },
+                is_both: {
+                    $sum: "$is_both"
+                },
+                is_none: {
+                    $sum: "$is_none"
+                },
+                count: {
+                    $sum: 1
+                },
+            },
+        }, {
+            $project: {
+                _id: 1,
+                id: "$id",
+                name: 1,
+                screen_name: 1,
+                is_rt: 1,
+                is_qt: 1,
+                is_only_rt: 1,
+                is_only_qt: 1,
+                is_none: 1,
+                count: 1,
+                tipos_usuario: {
+                    $cond: { if: { $gte: [ "$is_none", "$is_rt" ] }, then: "Creador", else: "Difusor" }
+                },
+            }
+        }, 
+    ])
+db.user_tweets_estadisticas.find({});
+
+
+db.tweet_original_estadisticas.drop();
+db.createView(
+    "tweet_original_estadisticas",
+    "tweets_lower",
+    [{
+            $project: {
+                "_id": "$_id",
+                "quoted_favorite_count": "$quoted_favorite_count",
+                "quoted_retweet_count": "$quoted_retweet_count",
+                "retweet_favorite_count": "$retweet_favorite_count",
+                "retweet_retweet_count": "$retweet_retweet_count",
+                "retweet_verified": "$retweet_verified",
+                "quoted_verified": "$quoted_verified"
+            }
+        }
+    ]);
+db.tweet_original_estadisticas.find({});
 
 
 db.tweet_users_original.drop();
@@ -176,32 +295,7 @@ db.createView(
     ]);
 db.tweet_count_hashtags.find({});
 
-/* Vistas usadas para nube de palabras */
-db.tweet_cuba.drop();
-db.createView(
-    "tweet_cuba",
-    "tweets_lower",
-    [{"$match": { 'text' :/.cuba./}}]
-    );
-db.tweet_cuba.find({});
-
-db.tweet_mx.drop();
-db.createView(
-    "tweet_mx",
-    "tweets_lower",
-    [{"$match": { 'text' :/.m*xico./}}]
-    );
-db.tweet_mx.find({});
-
-
-db.tweet_vz.drop();
-db.createView(
-    "tweet_vz",
-    "tweets_lower",
-    [{"$match": { 'text' :/.venezuela./}}]
-    );
-db.tweet_vz.find({});
-
+/* --------------------- Vista Mati ----------------------------------*/
 db.tweets_mongo_covid19.aggregate(
   [
 
@@ -231,3 +325,272 @@ db.tweets_mongo_covid19.aggregate(
     {$out: "tweetsCollection"}
   ]
 )
+/* ------------------- Fin vista mati ---------------------------------*/
+/* ------------------- Vista países ---------------------------------*/
+
+/* Vistas usadas para nube de palabras */
+db.tweet_cuba.drop();
+db.createView(
+    "tweet_cuba",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.cuba./ }, 
+                        { 'retweet_text' :/.cuba./ }, 
+                        { 'quoted_text' :/.cuba./ },
+                        { 'location' :/.cuba./ },
+                        { 'country' :/.cuba./ },
+                ]}
+    }]);
+db.tweet_cuba.find({});
+
+db.tweet_mx.drop();
+db.createView(
+    "tweet_mx",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.m*xic./ }, 
+                        { 'retweet_text' :/.m*xic./ }, 
+                        { 'quoted_text' :/.m*xic./ },
+                        { 'location' :/.m*xic./ },
+                        { 'country' :/.m*xic./ },
+                ]}
+    }]
+    );
+db.tweet_mx.find({});
+
+db.tweet_arg.drop();
+db.createView(
+    "tweet_arg",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.argentin./ }, 
+                        { 'retweet_text' :/.argentin./ }, 
+                        { 'quoted_text' :/.argentin./ },
+                        { 'location' :/.argentin./ },
+                        { 'country' :/.argentin./ },
+                ]}
+    }]);
+db.tweet_arg.find({});
+
+
+db.tweet_vz.drop();
+db.createView(
+    "tweet_vz",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.venezuela./ }, 
+                        { 'text' :/.venezolan./ }, 
+                        { 'retweet_text' :/.venezuela./ }, 
+                        { 'retweet_text' :/.venezolan./ }, 
+                        { 'quoted_text' :/.venezuela./ },
+                        { 'quoted_text' :/.venezolan./ }, 
+                        { 'location' :/.venezuela./ },
+                        { 'location' :/.venezolan./ }, 
+                        { 'country' :/.venezuela./ },
+                        { 'country' :/.venezolan./ }, 
+                ]}
+    }]);
+db.tweet_vz.find({});
+
+
+db.tweet_chile.drop();
+db.createView(
+    "tweet_chile",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.chile./ }, 
+                        { 'retweet_text' :/.chile./ }, 
+                        { 'quoted_text' :/.chile./ },
+                        { 'location' :/.chile./ },
+                        { 'country' :/.chile./ }, 
+                ]}
+    }]);
+db.tweet_chile.find({});
+
+
+db.tweet_usa.drop();
+db.createView(
+    "tweet_usa",
+    "tweets_lower",
+    [{
+        "$project": {
+            "_id": "$_id",
+            "tweet_id": "$_id",
+
+            "screen_name": "$screen_name",
+
+            "retweet_screen_name": "$retweet_screen_name",
+
+            "quoted_screen_name": "$quoted_screen_name",
+            "favorite_count": "$favorite_count",
+            "quote_count": "$quote_count",
+            "retweet_count": "$retweet_count",
+            "reply_count": "$reply_count",
+            "is_quote": "$is_quote",
+            "is_retweet": "$is_retweet",
+            "verified": "$verified",
+            "quoted_verified": "$quoted_verified",
+            "retweet_verified": "$retweet_verified",
+            "text": "$text",
+            "retweet_text": "$retweet_text",
+            "quoted_text": "$quoted_text",
+            "location": "$location",
+            "country": "$country",
+            "hashtag": "$hashtags"
+        }
+    }, {
+            "$match": { "$or": [
+                        { 'text' :/.united states./ }, 
+                        { 'text' :/.estados unidos./ }, 
+                        { 'text' :/.eeuu./ },  
+                        { 'retweet_text' :/.united states./ }, 
+                        { 'retweet_text' :/.estados unidos./ }, 
+                        { 'retweet_text' :/.eeuu./ },  
+                        { 'quoted_text' :/.united states./ }, 
+                        { 'quoted_text' :/.estados unidos./ }, 
+                        { 'quoted_text' :/.eeuu./ },  
+                        { 'location' :/.united states./ }, 
+                        { 'location' :/.estados unidos./ }, 
+                        { 'location' :/.eeuu./ },  
+                        { 'country' :/.united states./ }, 
+                        { 'country' :/.estados unidos./ }, 
+                        { 'country' :/.eeuu./ },  
+                ]}
+    }]);
+db.tweet_usa.find({});
+/*------------------------ Fin vista paises ---------------------------*/
