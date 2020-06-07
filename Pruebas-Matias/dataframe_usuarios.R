@@ -38,7 +38,7 @@ user_A <- aggregate(cbind(tweets,url_count, media_count ) ~ screen_name + tweet_
 
 # en la segunda agregacion aplico max para quedarme con el maximo valor ya que no quiero sumar
 # sobre las variables "actividad" y "popularidad" creadas anteriormente
-user_B <- aggregate(cbind(followers_friends_ratio,postsXyear) ~ screen_name + tweet_type, data = df_tweets, max)
+user_B <- aggregate(cbind(followers_friends_ratio,postsXyear, followers_count, friends_count, statuses_count) ~ screen_name + tweet_type, data = df_tweets, max)
 #nrow(user_B)
 #names(user2_B)
 #View(user_B)
@@ -58,3 +58,4 @@ df_users$url_tweets_ratio <- as.factor(url_tweets_ratio)
 df_users$tweet_type <- as.factor(df_users$tweet_type)
 
 View(df_users)
+
