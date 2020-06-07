@@ -8,7 +8,11 @@ group_url <- df_users$url_tweets_ratio
 group <- group_tweet_type
 
 #grafico
-sd3 <- scatterplot3d(x=df_users$tweets, y=log10(df_users$followers_friends_ratio),z=log10(df_users$postsXyear), color = as.numeric(group), pch = 19, xlab = "Tweets", ylab = "Log10(followers_friends_ratio)", zlab = "Log10(postsXyear)", main= "Actividad, Popularidad y cantidad de Tweets\nCategorizado por tipo de tweet")
+sd3 <- scatterplot3d(x=df_users$tweets, y=log10(df_users$followers_friends_ratio),z=log10(df_users$postsXyear), 
+                     color = as.numeric(group), pch = 19, xlab = "Tweets", 
+                     ylab = "Log10(followers_friends_ratio)", 
+                     zlab = "Log10(postsXyear)", 
+                     main= "Actividad, Popularidad y cantidad de Tweets\nCategorizado por tipo de tweet")
 
 #legend
 legend(sd3$xyz.convert(10, 15, 1), pch = 19, yjust=0,
@@ -20,16 +24,16 @@ legend(sd3$xyz.convert(10, 15, 1), pch = 19, yjust=0,
 
 #summary(df_users$postsXyear)
 #summary(log10(df_users$postsXyear))
-#hist(log(df_users$postsXyear))
+#hist(log10(df_users$postsXyear))
 #boxplot(log10(df_users$postsXyear))
 
 #summary(df_users$followers_friends_ratio)
 #summary(log(df_users$followers_friends_ratio))
-#hist(log(df_users$followers_friends_ratio))
-#boxplot(log(df_users$followers_friends_ratio))
+#hist(log10(df_users$followers_friends_ratio))
+#boxplot(log10(df_users$followers_friends_ratio))
 
 #summary(df_users$tweets)
-#hist(df_users$tweets)
+#hist(log10(df_users$tweets))
 #boxplot((df_users$tweets))
 
 
