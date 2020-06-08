@@ -135,13 +135,25 @@ e <- 0.000001
     bin_eq_width_postsXyear_log$suavizado_followers_friends_ratio_log[bin_eq_width_followers_friends_ratio_log$X==bin] = mean(df_users$followers_friends_ratio_log[ bin_eq_width_followers_friends_ratio_log$X==bin])
   }
   
+    bin_eq_width_followers_count_log <- discretize(df_users$followers_count_log,disc="equalwidth", nbins = nbins)
+  
+  for(bin in 1:nbins){
+    bin_eq_width_followers_count_log$suavizado_followers_count_log[bin_eq_width_followers_count_log$X==bin] = mean(df_users$followers_count_log[ bin_eq_width_followers_count_log$X==bin])
+  }
+    
+    bin_eq_width_statuses_count_log <- discretize(df_users$statuses_count_log,disc="equalwidth", nbins = nbins)
+  
+  for(bin in 1:nbins){
+    bin_eq_width_statuses_count_log$suavizado_statuses_count_log[bin_eq_width_statuses_count_log$X==bin] = mean(df_users$statuses_count_log[ bin_eq_width_statuses_count_log$X==bin])
+  }
+  
   #View(bin_eq_width)
   
-  plot(sort(df_users$postsXyear_log) , type = "l", col="red", ylab = "log10(postsXyear)", xlab = "Observaciones", main = "Actividad")
+  plot(sort(df_users$statuses_count_log) , type = "l", col="red", ylab = "log10(postsXyear)", xlab = "Observaciones", main = "Actividad")
   #plot(sort(df_users$followers_friends_ratio_log) , type = "l", col="red", ylab = "log10(followers_friends_ratio)", xlab = "Observaciones", main = "Popularidad")
   
   # Agrego la serie de la variable media 
-  lines(sort(bin_eq_width_postsXyear_log$suavizado_postsXyear_log),type = "l", col="blue")
+  lines(sort(bin_eq_width_statuses_count_log$suavizado_statuses_count_log),type = "l", col="blue")
   legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
   
   #lines(sort(bin_eq_width$suavizado_followers_friends_ratio_log),type = "l", col="blue")
@@ -154,20 +166,62 @@ e <- 0.000001
   df_users$followers_friends_ratio_log_s <- bin_eq_width_postsXyear_log$suavizado_followers_friends_ratio_log
   df_users$postsXyear_log_s <-  bin_eq_width_postsXyear_log$suavizado_postsXyear_log
   #df_users$friends_count_log_s <- 
-  #df_users$statuses_count_log_s <- 
-  #df_users$followers_count_log_s <- 
+  df_users$statuses_count_log_s <- bin_eq_width_statuses_count_log$suavizado_statuses_count_log
+  df_users$followers_count_log_s <- bin_eq_width_followers_count_log$suavizado_followers_count_log
+  
+  View(df_users)
   
   #summary(data)
-  plot(df_users$postsXyear_log_s)
-  plot(sort(df_users$postsXyear_log_s), ylab = "Log10(posteosXaño)", xlab = "Observaciones", main="Actividad discretizada \n en bins de igual ancho")
-  hist(df_users$postsXyear_log_s)
-  boxplot(df_users$postsXyear_log_s, ylab="log10(postsXyear)", main ="Actividad discretizada n\ en bins de igual ancho")
+  #plot(df_users$postsXyear_log_s)
+  #plot(sort(df_users$postsXyear_log_s), ylab = "Log10(posteosXaño)", xlab = "Observaciones", main="Actividad discretizada \n en bins de igual ancho")
+  #hist(df_users$postsXyear_log_s)
+  #boxplot(df_users$postsXyear_log_s, ylab="log10(postsXyear)", main ="Actividad discretizada n\ en bins de igual ancho")
   
 ```
 
 
   
   # variables redundantes
+  
+```{r}
+
+df_users[,c(17,18,19,20)]
+# variables ya escaladas y suavizadas
+cor(df_users[,c(17,18,19,20)], use = 'complete.obs')
+pairs(df_users[,c(17,18,19,20)], use = 'complete.obs')
+
+# analisis de varianzas
+lvf<-na.omit(df_users[,c(17,18,19,20)])
+
+# Primero normalizamos los datos (Min-Max) a un rango 0-1
+for(i in 1:ncol(lvf)) {
+  lvf[,i] <- (lvf[,i]-min(lvf[,i]))/(max(lvf[,i])-min(lvf[,i]))
+}
+
+# Calculamos la varianza para cada atributo y redondeamos a 4 decimales
+varianzas<-round(apply(lvf, 2, var),4)
+
+print(varianzas)
+
+library(caret)
+
+# Calculo matriz de correlacion
+matriz.correlacion<-cor(df_users[,c(17,18,19,20)], use = 'complete.obs')
+
+# Buscamos atributos con correlaciones superiores a 0.75
+highlyCorrelated <- findCorrelation(matriz.correlacion, cutoff=0.75)
+
+# Imprimimos los nombres de los atributos que cumplen con la condición anterior
+print(names(df_users[,c(17,18,19,20)][,highlyCorrelated]))
+
+#library(randomForest)
+
+#model_rf<-randomForest(df_users[,c(17,18,19,20)], na.action = na.omit)
+#importance(model_rf)
+
+#model_rf<-randomForest(Species ~ ., data=iris, na.action = na.omit)
+```
+  
   
   
   # outliers  no lo use pero lo probe
@@ -184,11 +238,34 @@ e <- 0.000001
   
   
   # filtrado
+  
+  
+```{r}
+sp <- ggplot(data=df_users, aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s)) + geom_point(c="black")
+# Add horizontal line at y = 2O
+sp + geom_hline(yintercept=3)
+# Change line type and color
+sp <- sp + geom_hline(yintercept=3, linetype="dashed", color = "red",  
+                      color = "red", size=1.5)
+# Change line size
+#sp <- sp + geom_hline(yintercept=3, linetype="dashed", 
+                #color = "red", size=1.5)
+sp + geom_vline(xintercept = 3)
+# Change line type, color and size
+sp <- sp + geom_vline(xintercept = 3, linetype="dashed", 
+                color = "red", size=1.5)
+
+sp +  
+  geom_point(colour="blue") +
+  geom_point(data=df_users[df_users$postsXyear_log_s > 3 & df_users$followers_friends_ratio_log_s > 3,], aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s), colour="black")
+
+```
+  
 ```{r}
 
-  plot(df_users$postsXyear_log_s, df_users$followers_friends_ratio_log_s, xlab="Actividad", ylab="Popularidad")
-  abline(h =3, untf = FALSE)
-  abline(v =3, untf = FALSE)
+  #plot(df_users$postsXyear_log_s, df_users$followers_friends_ratio_log_s, xlab="Actividad", ylab="Popularidad")
+  #abline(h =3, untf = FALSE)
+  #abline(v =3, untf = FALSE)
   
   # x actividad y Popularidad
   data_filtrada_1 <-  df_users[df_users$postsXyear_log_s > 3 & df_users$followers_friends_ratio_log_s > 3,]
@@ -198,12 +275,57 @@ e <- 0.000001
   # X tipo de tweet
   data_filtrada_2 <- data_filtrada_1[data_filtrada_1$tweet_type == "TW",]
   nrow(data_filtrada_2)
+  view(data_filtrada_2)
   
   # X presencia de urls
-  data_filtrada_3 <- data_filtrada_2[as.numeric(data_filtrada_2$followers_friends_ratio_log_s) >= 3, ]
+  class(data_filtrada_2$url_tweets_ratio)
+  data_filtrada_2$url_tweets_ratio <- as.numeric(data_filtrada_2$url_tweets_ratio)
+  class(data_filtrada_2$url_tweets_ratio)                                               
+  
+  #length(as.numeric(data_filtrada_2$url_tweets_ratio) == 1)
+  data_filtrada_3 <- data_filtrada_2[data_filtrada_2$url_tweets_ratio == "1" | data_filtrada_2$url_tweets_ratio == "2" , ]
   nrow(data_filtrada_3)
-  #view(data_filtrada_3)
+  view(data_filtrada_3)
   data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s)) 
 ```
+```{r}
+#plot(df_users$statuses_count_log_s, df_users$followers_count_log_s, xlab="Posts_totales", ylab="Followers")
+#abline(h =3, untf = FALSE)
+#abline(v =3, untf = FALSE)
+# Simple scatter plot
+sp <- ggplot(data=df_users, aes(x=statuses_count_log_s, y=followers_count_log_s)) + geom_point()
+# Add horizontal line at y = 2O
+sp + geom_hline(yintercept=3)
+# Change line type and color
+sp <- sp + geom_hline(yintercept=3, linetype="dashed", color = "red",  
+                      color = "red", size=1.5)
+# Change line size
+#sp <- sp + geom_hline(yintercept=3, linetype="dashed", 
+                #color = "red", size=1.5)
+sp + geom_vline(xintercept = 3)
+# Change line type, color and size
+sp + geom_vline(xintercept = 3, linetype="dashed", 
+                color = "red", size=1.5)
+
+```
+
+
+```{r}
+# x actividad y Popularidad
+data_filtrada_1_b <-  df_users[df_users$statuses_count_log_s > 3 & df_users$followers_count_log_s > 3,]
+View(data_filtrada_1_b) 
+casos_1_b <- nrow(data_filtrada_1_b)
+casos_1_b
   
+# X tipo de tweet
+data_filtrada_2_b <- data_filtrada_1_b[data_filtrada_1_b$tweet_type == "TW",]
+nrow(data_filtrada_2_b)
+  
+# X presencia de urls
+data_filtrada_3_b <- data_filtrada_2_b[data_filtrada_2_b$url_tweets_ratio == "1" | data_filtrada_2_b$url_tweets_ratio == "2" , ]
+nrow(data_filtrada_3_b)
+#view(data_filtrada_3)
+data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s))
+```
+
   
