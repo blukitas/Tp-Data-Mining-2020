@@ -288,6 +288,40 @@ sp +
   view(data_filtrada_3)
   data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s)) 
 ```
+# normalizacion
+
+```{r}
+data_filtrada_1$followers_friends_ratio_zscore <- scale(data_filtrada_1$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_1$postsXyear_zscore <- scale(data_filtrada_1$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_1$rank <- (data_filtrada_1$followers_friends_ratio_zscore + data_filtrada_1$postsXyear_zscore) /2
+data_filtrada_1_top100 <- data_filtrada_1[order(data_filtrada_1$rank, decreasing = TRUE), ]
+data_filtrada_1_top100 <- data_filtrada_1_top100[1:100,]
+view(data_filtrada_1_top100)
+
+
+data_filtrada_2$followers_friends_ratio_zscore <- scale(data_filtrada_2$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_2$postsXyear_zscore <- scale(data_filtrada_2$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_2$rank <- (data_filtrada_2$followers_friends_ratio_zscore + data_filtrada_2$postsXyear_zscore) /2
+data_filtrada_2_top100 <- data_filtrada_2[order(data_filtrada_2$rank, decreasing = TRUE), ]
+data_filtrada_2_top100 <- data_filtrada_2_top100[1:100,]
+view(data_filtrada_2_top100)
+
+
+data_filtrada_3$followers_friends_ratio_zscore <- scale(data_filtrada_3$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_3$postsXyear_zscore <- scale(data_filtrada_3$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_3$rank <- (data_filtrada_3$followers_friends_ratio_zscore + data_filtrada_3$postsXyear_zscore) /2
+data_filtrada_3_top100 <- data_filtrada_3[order(data_filtrada_3$rank, decreasing = TRUE), ]
+data_filtrada_3_top100 <- data_filtrada_3_top100[1:100,]
+view(data_filtrada_3_top100)
+
+```
+
+
+
+
+
+
+
 ```{r}
 #plot(df_users$statuses_count_log_s, df_users$followers_count_log_s, xlab="Posts_totales", ylab="Followers")
 #abline(h =3, untf = FALSE)
@@ -326,6 +360,26 @@ data_filtrada_3_b <- data_filtrada_2_b[data_filtrada_2_b$url_tweets_ratio == "1"
 nrow(data_filtrada_3_b)
 #view(data_filtrada_3)
 data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s))
+```
+```{r}
+data_filtrada_1_b$followers_friends_ratio_zscore <- scale(data_filtrada_1_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_1_b$postsXyear_zscore <- scale(data_filtrada_1_b$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_1_b$rank <- (data_filtrada_1_b$followers_friends_ratio_zscore + data_filtrada_1_b$postsXyear_zscore) /2
+data_filtrada_1_b_top100 <- data_filtrada_1_b[order(data_filtrada_1_b$rank, decreasing = TRUE), ]
+data_filtrada_1_b_top100 <- data_filtrada_1_b_top100[1:100,]
+
+data_filtrada_2_b$followers_friends_ratio_zscore <- scale(data_filtrada_2_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_2_b$postsXyear_zscore <- scale(data_filtrada_2_b$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_2_b$rank <- (data_filtrada_2_b$followers_friends_ratio_zscore + data_filtrada_2_b$postsXyear_zscore) /2
+data_filtrada_2_b_top100 <- data_filtrada_2_b[order(data_filtrada_2_b$rank, decreasing = TRUE), ]
+data_filtrada_2_b_top100 <- data_filtrada_2_b_top100[1:100,]
+
+data_filtrada_3_b$followers_friends_ratio_zscore <- scale(data_filtrada_3_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
+data_filtrada_3_b$postsXyear_zscore <- scale(data_filtrada_3_b$postsXyear_log_s, center=TRUE, scale=TRUE)
+data_filtrada_3_b$rank <- (data_filtrada_3_b$followers_friends_ratio_zscore + data_filtrada_3_b$postsXyear_zscore) /2
+data_filtrada_3_b_top100 <- data_filtrada_3_b[order(data_filtrada_3_b$rank, decreasing = TRUE), ]
+data_filtrada_3_b_top100 <- data_filtrada_3_b_top100[1:100,]
+
 ```
 
   
