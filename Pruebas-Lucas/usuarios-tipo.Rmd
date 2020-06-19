@@ -147,7 +147,7 @@ e <- 0.000001
     bin_eq_width_statuses_count_log$suavizado_statuses_count_log[bin_eq_width_statuses_count_log$X==bin] = mean(df_users$statuses_count_log[ bin_eq_width_statuses_count_log$X==bin])
   }
   
-  ##view(bin_eq_width)
+  #View(bin_eq_width)
   
   plot(sort(df_users$statuses_count_log) , type = "l", col="red", ylab = "log10(postsXyear)", xlab = "Observaciones", main = "Actividad")
   #plot(sort(df_users$followers_friends_ratio_log) , type = "l", col="red", ylab = "log10(followers_friends_ratio)", xlab = "Observaciones", main = "Popularidad")
@@ -169,7 +169,7 @@ e <- 0.000001
   df_users$statuses_count_log_s <- bin_eq_width_statuses_count_log$suavizado_statuses_count_log
   df_users$followers_count_log_s <- bin_eq_width_followers_count_log$suavizado_followers_count_log
   
-  #view(df_users)
+  View(df_users)
   
   #summary(data)
   #plot(df_users$postsXyear_log_s)
@@ -241,6 +241,7 @@ print(names(df_users[,c(17,18,19,20)][,highlyCorrelated]))
   
   
 ```{r}
+library("ggplot2")
 sp <- ggplot(data=df_users, aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s)) + geom_point(c="black")
 # Add horizontal line at y = 2O
 sp + geom_hline(yintercept=3)
@@ -262,6 +263,7 @@ sp +
 ```
   
 ```{r}
+library('tidyverse')
 
   #plot(df_users$postsXyear_log_s, df_users$followers_friends_ratio_log_s, xlab="Actividad", ylab="Popularidad")
   #abline(h =3, untf = FALSE)
@@ -275,7 +277,7 @@ sp +
   # X tipo de tweet
   data_filtrada_2 <- data_filtrada_1[data_filtrada_1$tweet_type == "TW",]
   nrow(data_filtrada_2)
-  #view(data_filtrada_2)
+  # view(data_filtrada_2)
   
   # X presencia de urls
   class(data_filtrada_2$url_tweets_ratio)
@@ -285,43 +287,9 @@ sp +
   #length(as.numeric(data_filtrada_2$url_tweets_ratio) == 1)
   data_filtrada_3 <- data_filtrada_2[data_filtrada_2$url_tweets_ratio == "1" | data_filtrada_2$url_tweets_ratio == "2" , ]
   nrow(data_filtrada_3)
-  #view(data_filtrada_3)
+  # view(data_filtrada_3)
   data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s)) 
 ```
-# normalizacion
-
-```{r}
-data_filtrada_1$followers_friends_ratio_zscore <- scale(data_filtrada_1$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_1$postsXyear_zscore <- scale(data_filtrada_1$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_1$rank <- (data_filtrada_1$followers_friends_ratio_zscore + data_filtrada_1$postsXyear_zscore) /2
-data_filtrada_1_top100 <- data_filtrada_1[order(data_filtrada_1$rank, decreasing = TRUE), ]
-data_filtrada_1_top100 <- data_filtrada_1_top100[1:100,]
-#view(data_filtrada_1_top100)
-
-
-data_filtrada_2$followers_friends_ratio_zscore <- scale(data_filtrada_2$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_2$postsXyear_zscore <- scale(data_filtrada_2$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_2$rank <- (data_filtrada_2$followers_friends_ratio_zscore + data_filtrada_2$postsXyear_zscore) /2
-data_filtrada_2_top100 <- data_filtrada_2[order(data_filtrada_2$rank, decreasing = TRUE), ]
-data_filtrada_2_top100 <- data_filtrada_2_top100[1:100,]
-#view(data_filtrada_2_top100)
-
-
-data_filtrada_3$followers_friends_ratio_zscore <- scale(data_filtrada_3$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_3$postsXyear_zscore <- scale(data_filtrada_3$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_3$rank <- (data_filtrada_3$followers_friends_ratio_zscore + data_filtrada_3$postsXyear_zscore) /2
-data_filtrada_3_top100 <- data_filtrada_3[order(data_filtrada_3$rank, decreasing = TRUE), ]
-data_filtrada_3_top100 <- data_filtrada_3_top100[1:100,]
-#view(data_filtrada_3_top100)
-
-```
-
-
-
-
-
-
-
 ```{r}
 #plot(df_users$statuses_count_log_s, df_users$followers_count_log_s, xlab="Posts_totales", ylab="Followers")
 #abline(h =3, untf = FALSE)
@@ -347,7 +315,7 @@ sp + geom_vline(xintercept = 3, linetype="dashed",
 ```{r}
 # x actividad y Popularidad
 data_filtrada_1_b <-  df_users[df_users$statuses_count_log_s > 3 & df_users$followers_count_log_s > 3,]
-#view(data_filtrada_1_b) 
+View(data_filtrada_1_b) 
 casos_1_b <- nrow(data_filtrada_1_b)
 casos_1_b
   
@@ -358,36 +326,172 @@ nrow(data_filtrada_2_b)
 # X presencia de urls
 data_filtrada_3_b <- data_filtrada_2_b[data_filtrada_2_b$url_tweets_ratio == "1" | data_filtrada_2_b$url_tweets_ratio == "2" , ]
 nrow(data_filtrada_3_b)
-##view(data_filtrada_3)
+#view(data_filtrada_3)
 data_filtrada_3 %>% select(screen_name, followers_friends_ratio_log_s, postsXyear_log_s, url_tweets_ratio,) %>% arrange(desc(followers_friends_ratio_log_s))
 ```
+
 ```{r}
-data_filtrada_1_b$followers_friends_ratio_zscore <- scale(data_filtrada_1_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_1_b$postsXyear_zscore <- scale(data_filtrada_1_b$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_1_b$rank <- (data_filtrada_1_b$followers_friends_ratio_zscore + data_filtrada_1_b$postsXyear_zscore) /2
-data_filtrada_1_b_top100 <- data_filtrada_1_b[order(data_filtrada_1_b$rank, decreasing = TRUE), ]
-data_filtrada_1_b_top100 <- data_filtrada_1_b_top100[1:100,]
-
-data_filtrada_2_b$followers_friends_ratio_zscore <- scale(data_filtrada_2_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_2_b$postsXyear_zscore <- scale(data_filtrada_2_b$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_2_b$rank <- (data_filtrada_2_b$followers_friends_ratio_zscore + data_filtrada_2_b$postsXyear_zscore) /2
-data_filtrada_2_b_top100 <- data_filtrada_2_b[order(data_filtrada_2_b$rank, decreasing = TRUE), ]
-data_filtrada_2_b_top100 <- data_filtrada_2_b_top100[1:100,]
-
-data_filtrada_3_b$followers_friends_ratio_zscore <- scale(data_filtrada_3_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
-data_filtrada_3_b$postsXyear_zscore <- scale(data_filtrada_3_b$postsXyear_log_s, center=TRUE, scale=TRUE)
-data_filtrada_3_b$rank <- (data_filtrada_3_b$followers_friends_ratio_zscore + data_filtrada_3_b$postsXyear_zscore) /2
-data_filtrada_3_b_top100 <- data_filtrada_3_b[order(data_filtrada_3_b$rank, decreasing = TRUE), ]
-data_filtrada_3_b_top100 <- data_filtrada_3_b_top100[1:100,]
-
-```
-
-  
-```{r}
-data_filtrada_3_b_top100
+data_filtrada_3_b
 ```
   
   
+
+## Clasificar en noticias - politica - otros
+
+```{r}
+u <- mongo(collection = "users_mongo_covid19", db = "DMUBA")
+user <- u$aggregate('[{"$project":{"_id":"$_id","user_id":"$user_id","screen_name":"$screen_name","description":"$description"}}]')
+```
+
+```{r}
+aux <- user
+names(aux) <- c("_id","user_id","screen_name","text")
+```
+
+
+```{r}
+aux$text <- tolower(aux$text)
+aux$text <- gsub("http.*","",aux$text)
+aux$text <- gsub("https.*","",aux$text)
+
+# #Quitando los hashtags y usuarios en los tweets_text
+# aux$text <- gsub("#\\w+","",aux$text)
+aux$text <- gsub("@\\w+","",aux$text)
+
+aux$text <- gsub("[[:punct:]]","",aux$text)
+aux$text <- gsub("\\w*[0-9]+\\w*\\s*", "",aux$text)
+
+aux$text <- gsub("[[:punct:]]","",aux$text)
+aux$text <- gsub("[^[:alnum:][:blank:]?&/\\-]", "", aux$text)
+aux$text <- iconv(aux$text,from="UTF-8",to="ASCII//TRANSLIT")
   
+palabras_noticias <- c("noticia", "periodismo", "periodista", 'periodico', "news", 'journalist', "reportero", "programa de tv", 'television', 'Reuters ', 'elpaisamerica', 'productora', 'conductor', 'columnista', 'corresponsal', 'telesur')
+aux$is_news_related <- F
+for (i in palabras_noticias) {
+  aux$is_news_related <- ifelse(grepl(i, aux$text, fixed= T), T, aux$is_news_related)
+}
+palabras_politica <- c("politico", "senador", "diputado", "alcalde", "subsecretario", "secretario", "secretaria", "presidencia", "presidente", "ministerio", "ministro", "ministra", "público", "publico", "canciller", "Partido Socialista", "PSUV", "partido del pueblo", 'asamblea nacional')
+aux$is_politic_related <- F
+for (i in palabras_politica) {
+  aux$is_politic_related <- ifelse(grepl(i, aux$text, fixed= T), T, aux$is_politic_related)
+}
+```
+
+```{r}
+# barplot(tweets$is_news_related)
+# barplot(tweets$is_politic_related)
+```
+
+```{r}
+aux$tipo_user = "Normal"
+aux[aux$is_news_related,]$tipo_user <- "Medio"
+aux[aux$is_politic_related,]$tipo_user <- "Politica"
+aux$is_news_related <- NULL
+aux$is_politic_related <- NULL
+aux$text <- NULL
+
+
+user <- aux %>% group_by(screen_name) %>% summarise(tipo_user = max(tipo_user))
+table(user$tipo_user)
+```
+
+
+```{r}
+tipos_user <- user
+```
+
+### RT
+```{r}
+u <- mongo(collection = "tweets_lower", db = "DMUBA")
+user <- u$aggregate('[{"$project":{"_id":"$_id","user_id":"$retweet_user_id","screen_name":"$retweet_screen_name","description":"$retweet_description"}}]')
+```
+
+```{r}
+aux <- user
+names(aux) <- c("_id","user_id","screen_name","text")
+```
+
+
+```{r}
+aux$text <- tolower(aux$text)
+aux$text <- gsub("http.*","",aux$text)
+aux$text <- gsub("https.*","",aux$text)
+
+# #Quitando los hashtags y usuarios en los tweets_text
+# aux$text <- gsub("#\\w+","",aux$text)
+aux$text <- gsub("@\\w+","",aux$text)
+
+aux$text <- gsub("[[:punct:]]","",aux$text)
+aux$text <- gsub("\\w*[0-9]+\\w*\\s*", "",aux$text)
+
+aux$text <- gsub("[[:punct:]]","",aux$text)
+aux$text <- gsub("[^[:alnum:][:blank:]?&/\\-]", "", aux$text)
+aux$text <- iconv(aux$text,from="UTF-8",to="ASCII//TRANSLIT")
   
-  
+palabras_noticias <- c("noticia", "periodismo", "periodista", 'periodico', "news", 'journalist', "reportero", "programa de tv", 'television', 'Reuters ', 'elpaisamerica', 'productora', 'conductor', 'columnista', 'corresponsal', 'telesur')
+aux$is_news_related <- F
+for (i in palabras_noticias) {
+  aux$is_news_related <- ifelse(grepl(i, aux$text, fixed= T), T, aux$is_news_related)
+}
+palabras_politica <- c("politico", "senador", "diputado", "alcalde", "subsecretario", "secretario", "secretaria", "presidencia", "presidente", "ministerio", "ministro", "ministra", "público", "publico", "canciller", "Partido Socialista", "PSUV", "partido del pueblo", 'asamblea nacional')
+aux$is_politic_related <- F
+for (i in palabras_politica) {
+  aux$is_politic_related <- ifelse(grepl(i, aux$text, fixed= T), T, aux$is_politic_related)
+}
+```
+
+```{r}
+# barplot(tweets$is_news_related)
+# barplot(tweets$is_politic_related)
+```
+
+```{r}
+aux$tipo_user = "Normal"
+aux[aux$is_news_related,]$tipo_user <- "Medio"
+aux[aux$is_politic_related,]$tipo_user <- "Politica"
+aux$is_news_related <- NULL
+aux$is_politic_related <- NULL
+aux$text <- NULL
+
+library('tidyverse')
+u2 <- aux %>% group_by(screen_name) %>% summarise(tipo_user = max(tipo_user))
+```
+
+
+```{r}
+
+# aux <- merge(aux, u2, by="screen_name")
+names(tipos_user)
+names(u2)
+user <- rbind(tipos_user, u2)
+table(user$tipo_user)
+```
+
+```{r}
+
+retweets <- mongo(db = "DMUBA", collection = "retweets")
+df_retweets = retweets$find()
+#nrow(df_retweets)
+
+# me quedo con los retweet_screen_name presentes en el dataset con el cual trabajamos
+df_retweets_screen_name <- df_retweets[df_retweets$retweet_screen_name %in% df_users$screen_name,]
+nrow(df_retweets_screen_name)
+# cantidad retweets por usuario
+stringsql1 = "select retweet_screen_name, count(*) as total from df_retweets_screen_name group by retweet_screen_name"
+autorarg = sqldf(stringsql1)
+#view(autorarg)
+
+# los ordeno de manera decreciente y tomo los primeros 133 usuarios mas retweeteados 
+user_retweet_top100 <- autorarg[order(autorarg$total, decreasing = TRUE), ]
+#nrow(user_retweet_top100)
+user_retweet_top100 <- user_retweet_top100[1:50,]
+```
+
+```{r}
+names(user)
+names(user) <- c('retweet_screen_name', 'tipo_user')
+tipos_usuarios_rt <- merge(user_retweet_top100, user, by="retweet_screen_name")
+nrow(tipos_usuarios_rt %>% group_by(retweet_screen_name) %>% summarise(tipo_user=max(tipo_user)))
+barplot(table((tipos_usuarios_rt %>% group_by(retweet_screen_name) %>% summarise(tipo_user=max(tipo_user)))$tipo_user))
+```
+

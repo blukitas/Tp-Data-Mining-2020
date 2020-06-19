@@ -162,5 +162,6 @@ nrow(data_filtrada_2)
 # X presencia de urls
 data_filtrada_3 <- data_filtrada_2[as.numeric(data_filtrada_2$url_tweets_ratio) >= 1, ]
 nrow(data_filtrada_3)
+names(data_filtrada_3)
 #view(data_filtrada_3)
 data_filtrada_3[["screen_name"]]
