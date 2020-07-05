@@ -1,26 +1,28 @@
-var diasSemana = ["domingo", "lunes",  "martes",  "miercoles",  "jueves",  "viernes",  "sabado"]
-
-db.vista_mati.drop();
-db.createView(
-    "vista_mati",
-    "tweets_lower",
+var diasSemana = ["domingo", "lunes",  "martes",  "miercoles",  "jueves",  "viernes",  "sabado"]
+
+// db.vista_mati.drop();
+// db.createView(
+//    "vista_mati",
+//    "tweets_lower",
+    db.tweets_lower.aggregate(
     [{
         "$project": {
-            "_id": 1,
+            "status_id": "$status_id",
+            "text": "$text",
             "user_id": 1,
             "followers_count": 1,
-            "user_popularity": {
-                               $switch: {
-                                  branches: [
-                                     { case: { $lt: [ "$followers_count", 1001] }, then: "Impopular" },
-                                     { case: { $and: [
-                                                    { "$gt": ["$followers_count", 1000]},
-                                                    { "$lt": ["$followers_count", 3501 ]} 
-                                                    ]}, then: "Normal" },
-                                     { case: { "$gt": ["$followers_count", 3500] }, then: "Populares" }
-                                  ]
-                               }
-                            },
+//            "user_popularity": {
+ //                              $switch: {
+  //                                branches: [
+   //                                  { case: { $lt: [ "$followers_count", 1001] }, then: "Impopular" },
+    //                                 { case: { $and: [
+     //                                               { "$gt": ["$followers_count", 1000]},
+      //                                              { "$lt": ["$followers_count", 3501 ]} 
+       //                                             ]}, then: "Normal" },
+        //                             { case: { "$gt": ["$followers_count", 3500] }, then: "Populares" }
+         //                         ]
+          //                     }
+           //                 },
             "location": 1,
             "country": 1,
             "created_at": 1,
@@ -68,15 +70,15 @@ db.createView(
                       default: "Otro"
                    }
                 },
-            "hashtag": "$hashtags",
-            "postsXyear": {
-                "$divide": [
-                    "$statuses_count", 
-                        { "$subtract": [2021, {$year: "$created_at"}]}
-                ]
-            },
-            "followers_friends_ratio": {
-                "$divide": ["$followers_count", {"$add": ["$friends_count", 0.0001]}]
+            "hashtag": "$hashtags",
+            "postsXyear": {
+                "$divide": [
+                    "$statuses_count", 
+                        { "$subtract": [2021, {$year: "$created_at"}]}
+                ]
+            },
+            "followers_friends_ratio": {
+                "$divide": ["$followers_count", {"$add": ["$friends_count", 0.0001]}]
             }
         }
     }, {
@@ -94,10 +96,11 @@ db.createView(
                    }                    
     }, {
         "$project": {
-            "_id": 1,
+            "status_id": 1,
+            "text": 1,
             "user_id": 1,
             "followers_count": 1,
-            "cat_user_popularity": "$user_popularity",
+            //"cat_user_popularity": "$user_popularity",
             "location": 1,
             "country": 1,
             "created_at": 1,
@@ -105,12 +108,13 @@ db.createView(
             "created_at_hora": "$created_at_hora",
             "cat_created_at_momento": "$created_at_momento",
             "cat_tipo": "$tipo",
-            "hashtag": 1,
-            "postsXyear": 1,
+            "cat_hashtag": "$hashtag",
+            "postsXyear": 1,
             "followers_friends_ratio": 1            
         }
-    }, {
-        "$limit": 10000
+    }, 
+    {
+        $merge: "query_compleja"
     }
     ])
-db.vista_mati.find({});
+// db.vista_mati.find({});

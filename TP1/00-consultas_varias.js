@@ -114,23 +114,23 @@ db.tweet_hashtags.aggregate(
                 count: -1
             }
         }
-    ])
-db.tweets_lower.find({"hashtags":{$elemMatch:{"$in":[null], "$exists":true}}})
-db.tweets_lower.find({ hashtags: { $gt: [] } })
-db.tweets_lower.aggregate( [
-    {
-        "$project": {
-            "_id": "$_id",
-            "user_id": "$user_id",
-            "hashtag": "$hashtags"
-        }
-    }, {
-        "$unwind": "$hashtag"
-    }, {
-        "$match": { "hashtag": { "$ne": null } }
-    }
-] )
-
+    ])
+db.tweets_lower.find({"hashtags":{$elemMatch:{"$in":[null], "$exists":true}}})
+db.tweets_lower.find({ hashtags: { $gt: [] } })
+db.tweets_lower.aggregate( [
+    {
+        "$project": {
+            "_id": "$_id",
+            "user_id": "$user_id",
+            "hashtag": "$hashtags"
+        }
+    }, {
+        "$unwind": "$hashtag"
+    }, {
+        "$match": { "hashtag": { "$ne": null } }
+    }
+] )
+
 
 // Hashtags covid*19
 db.tweets_lowercase.aggregate([{
