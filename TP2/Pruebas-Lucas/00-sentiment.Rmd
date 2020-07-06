@@ -20,12 +20,6 @@ library("mice")
 library("mongolite")
 
 ```
-
-```{r}
-tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
-```
-
-
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
 #  Alguna info y gráficos con texto, longitud y sentimientos
@@ -41,17 +35,31 @@ library(twitteR)
 library(syuzhet)
 ```
 
+# Collection
+
+```{r}
+#tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
+tweets <- mongo(collection = "tweets_lower", db = "DMUBA")
+```
+
+#Tweets
 
 ```{r}
 # tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","text":"$text"}},{"$limit": 1}]')
 # tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit": 100}]')
-tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}}]')
+# Tweets ya transformados
+# tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":{"$exists":"true","$ne":""}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text","text_limpio":"$text_limpio"}}]')
+# Tweets sin transformar
+tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":1000}]')
 ```
 
 
 ```{r}
 summary(tweets_text)
 cat("Cant. de filas: ", nrow(tweets_text))
+```
+```{r}
+tweets_text[1,]
 ```
 
 
@@ -135,25 +143,24 @@ update_text <- function(x) {
 
 ```{r}
 apply(tweets_text.df2[,c('status_id', 'text')], 1, update_text)
-
 ```
 ```{r}
 tweets_text.df2$sentiment <- ifelse(is.na(tweets_text.df2$text), 0, get_sentiment(method = "nrc", char_v = as.vector(tweets_text.df2$text), language = "spanish"))
 ```
 
 ```{r}
-barplot(table(tweets_text.df2$sentiment))
-boxplot(tweets_text.df2$sentiment)
-#tweets_text.df2[tweets_text.df2$sentiment < 0,]
+# barplot(table(tweets_text.df2$sentiment))
+# boxplot(tweets_text.df2$sentiment)
+# tweets_text.df2[tweets_text.df2$sentiment < 0,]
 ```
 
 ```{r}
 update_sentiment <- function(x) {
-    print("status")
-    cat('status :', x[['status_id']], ' .\n\n')
-    cat('sentiment :', x[['sentiment']], ' .\n\n')
-    cat('Query: ',paste0("{status_id:'",x[["status_id"]],"'} \n\n"))
-    cat('Update: ', paste0("{'$set':{'sentiment': '",x[["sentiment"]],"'}} \n\n"))
+    # print("status")
+    # cat('status :', x[['status_id']], ' .\n\n')
+    # cat('sentiment :', x[['sentiment']], ' .\n\n')
+    # cat('Query: ',paste0("{status_id:'",x[["status_id"]],"'} \n\n"))
+    # cat('Update: ', paste0("{'$set':{'sentiment': '",x[["sentiment"]],"'}} \n\n"))
     
       # query = paste0("[{'$match': {status_id:'",x[["status_id"]],"'}}]"), 
     tweets$update(
@@ -161,7 +168,7 @@ update_sentiment <- function(x) {
       update = paste0('{"$set":{"sentiment": "',x[["sentiment"]],'"}}'), 
       upsert = FALSE, multiple = FALSE
     )
-    cat('--Actualizado--.\n\n')
+    # cat('--Actualizado--.\n\n')
 }
 ```
 

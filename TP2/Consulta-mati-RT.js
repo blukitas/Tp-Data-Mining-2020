@@ -174,21 +174,16 @@ var diasSemana = ["domingo", "lunes",  "martes",  "miercoles",  "jueves",  "vier
     {
         $merge: "query_compleja_RT"
     }
-    ])
+    ])
+    
 // db.query_compleja_RT.find({status_id:'1256443202162380807'} );
-// db.query_compleja_RT.aggregate([{'$match': {status_id:'1256443202162380807'}}]);
-// db.query_compleja_RT.find({})
-// db.query_compleja_RT.find({text_limpio: {"$exists" : true, "$ne" : ""}} ).count();
-// db.query_compleja_RT.find({text_limpio: {"$exists" : false}} ).count();
-         
+// db.tweets_lower.find().count(); #443734
+// db.tweets_lower.find({text_limpio: {"$ne" : null}} ).count(); // 1000
+// db.tweets_lower.find({text_limpio: null } ).count(); // 441734
+// db.tweets_lower.aggregate([{"$match":{"text_limpio":{"$exists":"false"}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}}]);
+// db.query_compleja_RT.aggregate([{"$match":{"text_limpio":{"$exists":"false"}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}}]);
+
+// db.tweets_lower.aggregate([{"$match":{"text_limpio":{"$ne":"true"}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}}])
     // 73629 - 9.58
     // 75343 - 10.00
- // db.query_compleja_RT.update({
- // status_id: '1256443202162380807'
- // }, {
- // $set: {
- // 'text2': 'test1'
- // }
- // }, {
- // multi: true
- // })
+ 
