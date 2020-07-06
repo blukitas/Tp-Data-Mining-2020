@@ -132,6 +132,8 @@ boxplot(df_users$postsXyear_log_s, ylab="log10(postsXyear)", main ="Actividad di
 
 
 
+
+
 # variables redundantes
 
 
@@ -145,6 +147,26 @@ boxplot(df_users$postsXyear_log_s, ylab="log10(postsXyear)", main ="Actividad di
 #nrow(df_users)
 
 # filtrado
+
+sp <- ggplot(data=df_users, aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s), xlab="Actividad (log10(postsXyear)", ylab="Popularidad (log10(followers/friends))") + geom_point()
+# Add horizontal line at y = 2O
+sp + geom_hline(yintercept=3)
+# Change line type and color
+sp <- sp + geom_hline(yintercept=3, linetype="dashed", color = "red",  
+                      color = "red", size=1.5)
+# Change line size
+#sp <- sp + geom_hline(yintercept=3, linetype="dashed", 
+#color = "red", size=1.5)
+sp + geom_vline(xintercept = 3)
+# Change line type, color and size
+sp <- sp + geom_vline(xintercept = 3, linetype="dashed", 
+                      color = "red", size=1.5)
+
+sp <- sp +  
+  geom_point(colour="blue") +
+  geom_point(data=df_users[df_users$postsXyear_log_s > 3 & df_users$followers_friends_ratio_log_s > 3,], aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s), colour="black")
+
+sp
 
 plot(df_users$postsXyear_log_s, df_users$followers_friends_ratio_log_s, xlab="Actividad", ylab="Popularidad")
 abline(h =3, untf = FALSE)

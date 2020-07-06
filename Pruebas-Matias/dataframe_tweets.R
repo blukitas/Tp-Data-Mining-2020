@@ -21,10 +21,10 @@ library("lubridate")
 library("RColorBrewer")
 
 #collection se puede ver como esta estructurada en Vistas
-tweets <- mongo(collection = "tweetsCollection_mati", db = "DMUBA")
+tweets <- mongo(collection = "tweetsCollection", db = "DMUBA")
 df_tweets <- tweets$find()
 View(df_tweets)
-#names(df_tweets)
+names(df_tweets)
 
 # creo las columnas is_quote  y is_tweet 
 df_tweets$is_tweet <- (!df_tweets$is_quote & !df_tweets$is_retweet)

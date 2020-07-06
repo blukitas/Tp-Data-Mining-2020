@@ -241,7 +241,7 @@ print(names(df_users[,c(17,18,19,20)][,highlyCorrelated]))
   
   
 ```{r}
-sp <- ggplot(data=df_users, aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s)) + geom_point(c="black")
+sp <- ggplot(data=df_users, aes(x=postsXyear_log_s, y=followers_friends_ratio_log_s)) + geom_point() + xlab("Actividad") + ylab("Popularidad")  
 # Add horizontal line at y = 2O
 sp + geom_hline(yintercept=3)
 # Change line type and color
@@ -295,15 +295,17 @@ data_filtrada_1$followers_friends_ratio_zscore <- scale(data_filtrada_1$follower
 data_filtrada_1$postsXyear_zscore <- scale(data_filtrada_1$postsXyear_log_s, center=TRUE, scale=TRUE)
 data_filtrada_1$rank <- (data_filtrada_1$followers_friends_ratio_zscore + data_filtrada_1$postsXyear_zscore) /2
 data_filtrada_1_top100 <- data_filtrada_1[order(data_filtrada_1$rank, decreasing = TRUE), ]
-data_filtrada_1_top100 <- data_filtrada_1_top100[1:100,]
-view(data_filtrada_1_top100)
+#data_filtrada_1_top100 <- data_filtrada_1_top100[1:100,]
+data_filtrada_1_top50 <- data_filtrada_1_top100[1:50,]
+#view(data_filtrada_1_top100)
 
 
 data_filtrada_2$followers_friends_ratio_zscore <- scale(data_filtrada_2$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
 data_filtrada_2$postsXyear_zscore <- scale(data_filtrada_2$postsXyear_log_s, center=TRUE, scale=TRUE)
 data_filtrada_2$rank <- (data_filtrada_2$followers_friends_ratio_zscore + data_filtrada_2$postsXyear_zscore) /2
 data_filtrada_2_top100 <- data_filtrada_2[order(data_filtrada_2$rank, decreasing = TRUE), ]
-data_filtrada_2_top100 <- data_filtrada_2_top100[1:100,]
+#data_filtrada_2_top100 <- data_filtrada_2_top100[1:100,]
+data_filtrada_2_top50 <- data_filtrada_2_top100[1:50,]
 view(data_filtrada_2_top100)
 
 
@@ -311,7 +313,8 @@ data_filtrada_3$followers_friends_ratio_zscore <- scale(data_filtrada_3$follower
 data_filtrada_3$postsXyear_zscore <- scale(data_filtrada_3$postsXyear_log_s, center=TRUE, scale=TRUE)
 data_filtrada_3$rank <- (data_filtrada_3$followers_friends_ratio_zscore + data_filtrada_3$postsXyear_zscore) /2
 data_filtrada_3_top100 <- data_filtrada_3[order(data_filtrada_3$rank, decreasing = TRUE), ]
-data_filtrada_3_top100 <- data_filtrada_3_top100[1:100,]
+#data_filtrada_3_top100 <- data_filtrada_3_top100[1:100,]
+data_filtrada_3_top50 <- data_filtrada_3_top100[1:50,]
 view(data_filtrada_3_top100)
 
 ```
@@ -372,7 +375,8 @@ data_filtrada_2_b$followers_friends_ratio_zscore <- scale(data_filtrada_2_b$foll
 data_filtrada_2_b$postsXyear_zscore <- scale(data_filtrada_2_b$postsXyear_log_s, center=TRUE, scale=TRUE)
 data_filtrada_2_b$rank <- (data_filtrada_2_b$followers_friends_ratio_zscore + data_filtrada_2_b$postsXyear_zscore) /2
 data_filtrada_2_b_top100 <- data_filtrada_2_b[order(data_filtrada_2_b$rank, decreasing = TRUE), ]
-data_filtrada_2_b_top100 <- data_filtrada_2_b_top100[1:100,]
+#data_filtrada_2_b_top100 <- data_filtrada_2_b_top100[1:100,]
+data_filtrada_2_b_top50 <- data_filtrada_2_b_top100[1:50,]
 
 data_filtrada_3_b$followers_friends_ratio_zscore <- scale(data_filtrada_3_b$followers_friends_ratio_log_s, center=TRUE, scale=TRUE)
 data_filtrada_3_b$postsXyear_zscore <- scale(data_filtrada_3_b$postsXyear_log_s, center=TRUE, scale=TRUE)

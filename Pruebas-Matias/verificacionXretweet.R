@@ -20,6 +20,7 @@ autorarg = sqldf(stringsql1)
 user_retweet_top100 <- autorarg[order(autorarg$total, decreasing = TRUE), ]
 #nrow(user_retweet_top133)
 user_retweet_top100 <- user_retweet_top100[1:100,]
+user_retweet_top50 <- user_retweet_top100[1:50,]
 #user_retweet_top133 <- user_retweet_top133[1:133,]
 #user_retweet_top1532 <- user_retweet_top133[1:763,]
 #user_retweet_top124 <- user_retweet_top133[1:124,]
@@ -27,7 +28,8 @@ user_retweet_top100 <- user_retweet_top100[1:100,]
 
 # cruzo con la tabla de los perfiles "generados de contenido" data_filtrada_2, sin estar filtrado por url
 
-a1 <- user_retweet_top100 
+a1 <- user_retweet_top50
+#a1 <- user_retweet_top100 
 #a1 <- user_retweet_top133
 #a1 <- user_retweet_top1532
 #a1 <- user_retweet_top124
@@ -36,7 +38,10 @@ nrow(a1)
 #a2 <- data_filtrada_2_top100
 #a2 <-data_filtrada_3_top100
 #a2 <-data_filtrada_2_b_top100
-a2 <-data_filtrada_3_b_top100
+#a2 <-data_filtrada_3_b_top100
+#a2 <- data_filtrada_3_top50
+#a2 <-data_filtrada_2_top50
+a2 <- data_filtrada_2_b_top50
 #nrow(a1)
 
 nrow(a2)
