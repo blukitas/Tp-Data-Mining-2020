@@ -1,0 +1,239 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tm)
+library(mongolite)
+library(stringr)
+library(stringi)
+library(tidyr)
+library(dplyr)
+library(arules)
+```
+
+# subset de retweets
+
+```{r}
+retweets_c1 <- mongo(collection ="retweets_c1", db = "DMUBA")
+```
+
+# discretizacion de variables : retweet_favorite_count, retweet_retweet_count
+```{r}
+df_retweets_dtzn <- retweets_c1$find(query = '{}', fields = '{"retweet_status_id": true, "retweet_favorite_count": true, "retweet_retweet_count": true}')
+```
+
+
+# retweet_favorite_count
+```{r}
+#summary(df_retweets_dtzn$retweet_favorite_count)
+#plot(sort(df_retweets_dtzn$retweet_favorite_count))
+hist(df_retweets_dtzn$retweet_favorite_count, ylab ="Frecuencia", main="retweet_favorite_count \n SIN transformación")
+rug(jitter(df_retweets_dtzn$retweet_favorite_count))
+
+```
+
+
+```{r}
+#boxplot(df_retweets_dtzn$retweet_favorite_count)
+boxplot(log10(df_retweets_dtzn$retweet_favorite_count + 1), main=" log10 retweet_favorite_count" )
+#percentage_retweet_favorite_count <- length(which(df_retweets_dtzn$retweet_favorite_count == 0)) / nrow(df_retweets_dtzn) * 100
+#percentage_retweet_favorite_count
+#length(which(df_retweets_dtzn$retweet_favorite_count == 0))
+```
+
+
+```{r}
+
+df_retweets_dtzn$retweet_favorite_count_log <- log10(df_retweets_dtzn$retweet_favorite_count + 1)
+hist(df_retweets_dtzn$retweet_favorite_count_log, xlab="retweet_favorite_count_log", ylab ="Frecuencia", main="retweet_favorite_count con transformación log10")
+rug(jitter(df_retweets_dtzn$retweet_favorite_count_log))
+```
+
+# creamos los bins
+```{r}
+
+K <- df_retweets_dtzn[,'retweet_favorite_count_log'] 
+
+df_retweets_dtzn$retweet_favorite_count_log_c <- cut(K, c(-Inf,0.69, 1.69, 2.69, 3.69, Inf), labels = c("muy_baja", "baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_retweets_dtzn$retweet_favorite_count_log_c), main="Adherencia", las=2 )
+
+```
+
+#retweet_retweet_count
+```{r}
+#summary(df_retweets_dtzn$retweet_retweet_count)
+#plot(sort(df_retweets_dtzn$retweet_retweet_count))
+hist(df_retweets_dtzn$retweet_retweet_count, ylab ="Frecuencia", main="retweet_retweet_count \n SIN transformación")
+rug(jitter(df_retweets_dtzn$retweet_retweet_count))
+
+```
+```{r}
+df_retweets_dtzn$retweet_retweet_count_log <- log10(df_retweets_dtzn$retweet_retweet_count + 1)
+head(df_retweets_dtzn$retweet_retweet_count_log)
+hist(df_retweets_dtzn$retweet_retweet_count_log, xlab= "retweet_retweet_count_log", ylab ="Frecuencia", main="retweet_retweet_count con transformacion Log10")
+```
+
+
+```{r}
+K <- df_retweets_dtzn[,'retweet_retweet_count_log'] 
+
+df_retweets_dtzn$retweet_retweet_count_log_c <- cut(K, c(-Inf,1, 2, 3, Inf), labels = c("muy_baja", "baja", "intermedia", "alta"))
+
+barplot(table(df_retweets_dtzn$retweet_retweet_count_log_c) , main="Difusion", las=2 )
+```
+
+# transformacion para arules
+```{r}
+df_retweet <- df_retweets_dtzn[c(2,6,8)]
+colnames(df_retweet)[2] <- "cat_adherencia"
+colnames(df_retweet)[3] <- "cat_difusion"
+df_retweet$retweet_status_id <- as.numeric(df_retweet$retweet_status_id)
+length(unique(df_retweet$retweet_status_id))
+
+```
+
+# Rotación de las matriz de datos de retweet y las categóricas adherencia y difusion
+```{r}
+
+df_tuples_1 = df_retweet %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("retweet_status_id", "feat", "val")
+
+# se agrega prefijo de tipo de ítem:
+#df_tuples_1 = df_tuples_1 %>% 
+  #mutate("item" = paste0(feat,"=",val)) %>% 
+  #select("retweet_status_id", "item")
+
+head(df_tuples_1) 
+
+```
+
+
+```{r}
+df_retweets_txt <- retweets_c1$find(query = '{}', fields = '{"retweet_status_id":true ,"retweet_text": true}')
+
+```
+
+```{r}
+
+
+df_retweets_txt$transformada <- df_retweets_txt$retweet_text
+
+# se quitan espacios extras
+df_retweets_txt$transformada =  stripWhitespace(df_retweets_txt$transformada)
+# se quitan espacios al principio y final de la cadena
+df_retweets_txt$transformada = str_trim(df_retweets_txt$transformada)
+
+#Quitamos las personas (@)
+df_retweets_txt$transformada <- gsub("@\\w+", "", df_retweets_txt$transformada)
+#Quitamos los links html
+df_retweets_txt$transformada <- gsub("http[^[:space:]]*", "", df_retweets_txt$transformada)
+
+# Se quitan caracteres no alfanuméricos
+df_retweets_txt$transformada <- gsub("[^[:alnum:][:blank:]?&/\\-]", "", df_retweets_txt$transformada)
+df_retweets_txt$transformada <- gsub("U00..", "", df_retweets_txt$transformada)
+
+
+# Se pasa a minusculas
+df_retweets_txt$transformada = tolower(df_retweets_txt$transformada)
+# Se quita puntuacion
+df_retweets_txt$transformada = removePunctuation(df_retweets_txt$transformada)
+# Se quitan acentos
+df_retweets_txt$transformada = stri_trans_general(df_retweets_txt$transformada, "Latin-ASCII")
+# Se quitan números
+df_retweets_txt$transformada = removeNumbers(df_retweets_txt$transformada)
+
+
+# listado de terminos sin repetir
+df_retweets_txt$transformada = removeWords(df_retweets_txt$transformada, stopwords("spanish"))
+
+df_retweets_txt$transformada = removeWords(df_retweets_txt$transformada, c("covid","coronavirus","cuarentena", "casa","quedate","pandemia"))
+
+# se quitan espacios al principio y final de la cadena
+df_retweets_txt$transformada = str_trim(df_retweets_txt$transformada)
+
+```
+
+# una vez pre procesado y solo con _id y colummna de texto
+```{r}
+
+df_retweet_text_limpia <- df_retweets_txt
+
+# descarto _columnas
+df_retweet_text_limpia$`_id` <- NULL
+df_retweet_text_limpia$retweet_text <- NULL
+
+# se separa el texto en términos
+df_retweet_text_limpia$words <-  tokenizers::tokenize_words(df_retweet_text_limpia$transformada, simplify = T)
+
+df_retweet_text_limpia$transformada <- NULL
+
+# se pasa a formato pares: user-término
+df_retweet_text_limpia <- df_retweet_text_limpia %>% select("retweet_status_id", "words")  %>% unnest(words) %>%  distinct()
+write.csv(df_retweet_text_limpia, file = "df_txt.csv")
+# se agrega prefijo de tipo de ítem:
+df_txt <- df_retweet_text_limpia
+colnames(df_txt)[2] <- "cat_words"
+class(df_txt$retweet_status_id)
+df_txt$retweet_status_id <- as.numeric(df_txt$retweet_status_id)
+#df_txt$item = paste0("word=", df_txt$words)
+#df_tuples_2 <-df_txt[c(1,3)]
+
+```
+
+
+```{r}
+df_tuples_2 = df_txt %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("retweet_status_id", "feat", "val")
+
+head(df_tuples_2)
+```
+
+
+```{r}
+# Concateno los dos data.frames
+df_tuples = rbind(df_tuples_1,df_tuples_2)
+head(df_tuples)
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples = df_tuples %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("retweet_status_id", "item")
+
+# Cantidad de transacciones (son los user_id Ãºnicos)
+length(unique(df_tuples$retweet_status_id))
+```
+
+```{r}
+# Generamos las transacciones
+trans <- as(split(df_tuples$item, df_tuples$retweet_status_id), "transactions")
+
+inspect(trans[10])
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules = apriori(trans, parameter=list(target="rule", support=0.005, confidence=0.6, maxlen=9, minlen=2))
+print(rules)
+
+inspect(sort(rules, by="lift", decreasing = TRUE))
+
+difusion_rules = subset(rules, subset = rhs %pin% "adherencia=alta")
+
+print(difusion_rules)
+
+inspect(sort(difusion_rules, by="lift", decreasing = TRUE))
+```
+
