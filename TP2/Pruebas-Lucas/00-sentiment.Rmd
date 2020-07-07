@@ -1,0 +1,178 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library("ggplot2")
+library("readr")
+library("dplyr")
+library("highcharter")
+library("treemap")
+library("modeest")
+library("GGally")
+library("tidyverse")
+library("hrbrthemes")
+library("tidyr")
+library("VIM")
+library("e1071")
+library("mice")
+library("mongolite")
+
+```
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
+#  Alguna info y gráficos con texto, longitud y sentimientos
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
+
+#Carga de paquetes
+
+```{r}
+library(SnowballC)
+library(tm)
+library(twitteR)
+library(syuzhet)
+```
+
+# Collection
+
+```{r}
+#tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
+tweets <- mongo(collection = "tweets_lower", db = "DMUBA")
+```
+
+#Tweets
+
+```{r}
+# tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","text":"$text"}},{"$limit": 1}]')
+# tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit": 100}]')
+# Tweets ya transformados
+# tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":{"$exists":"true","$ne":""}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text","text_limpio":"$text_limpio"}}]')
+# Tweets sin transformar
+tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":1000}]')
+```
+
+
+```{r}
+summary(tweets_text)
+cat("Cant. de filas: ", nrow(tweets_text))
+```
+```{r}
+tweets_text[1,]
+```
+
+
+```{r}
+tweets_text$cantChars <- nchar(tweets_text$text)
+summary(tweets_text)
+```
+
+
+```{r}
+# Por hay un tweet de 900 char? será por url o cosas así?
+# boxplot(tweets_text$cantChars)
+```
+
+
+```{r}
+
+# ggplot(tweets_text, aes(x=cantChars)) +
+#   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
+#   ggtitle("Night price distribution of Airbnb appartements") +
+#   theme_ipsum()
+```
+
+
+```{r}
+tweets_text.df2 <- tweets_text
+tweets_text.df2$text <- gsub("http.*","",tweets_text.df2$text)
+tweets_text.df2$text <- gsub("https.*","",tweets_text.df2$text)
+
+#Quitando los hashtags y usuarios en los tweets_text
+tweets_text.df2$text <- gsub("#\\w+","",tweets_text.df2$text)
+tweets_text.df2$text <- gsub("@\\w+","",tweets_text.df2$text)
+
+```
+
+
+```{r}
+tweets_text.df2$cantChars <- nchar(tweets_text.df2$text)
+# ggplot(tweets_text.df2, aes(x=cantChars)) +
+#   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
+#   ggtitle("Night price distribution of Airbnb appartements") +
+#   theme_ipsum()
+```
+
+
+```{r}
+tweets_text.df2$text <- gsub("[[:punct:]]","",tweets_text.df2$text)
+tweets_text.df2$text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$text)
+tweets_text.df2$text <- iconv(tweets_text.df2$text,from="UTF-8",to="ASCII//TRANSLIT"); #Sin acentos
+
+tweets_text.df2$text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$text)
+tweets_text.df2$text <- gsub("\\s+", " ",tweets_text.df2$text)
+tweets_text.df2$text <- gsub("\"", "",tweets_text.df2$text)
+
+
+tweets_text.df2$cantChars <- nchar(tweets_text.df2$text)
+# ggplot(tweets_text.df2, aes(x=cantChars)) +
+#   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
+#   ggtitle("Night price distribution of Airbnb appartements") +
+#   theme_ipsum()
+```
+
+```{r}
+update_text <- function(x) {
+    # print("status")
+    # cat('status :', x[['status_id']], ' .\n\n')
+    # cat('text :', x[['text']], ' .\n\n')
+    # cat('Query: ',paste0("{status_id:'",x[["status_id"]],"'} \n\n"))
+    # cat('Update: ', paste0("{'$set':{'text2': '",x[["text"]],"'}} \n\n"))
+    
+      # query = paste0("[{'$match': {status_id:'",x[["status_id"]],"'}}]"), 
+    tweets$update(
+      query = paste0('{"status_id":"',x[["status_id"]], '"}'), 
+      update = paste0('{"$set":{"text_limpio": "',x[["text"]],'"}}'), 
+      upsert = FALSE, multiple = FALSE
+    )
+    # cat('--Actualizado--.\n\n')
+}
+```
+
+
+```{r}
+apply(tweets_text.df2[,c('status_id', 'text')], 1, update_text)
+```
+```{r}
+tweets_text.df2$sentiment <- ifelse(is.na(tweets_text.df2$text), 0, get_sentiment(method = "nrc", char_v = as.vector(tweets_text.df2$text), language = "spanish"))
+```
+
+```{r}
+# barplot(table(tweets_text.df2$sentiment))
+# boxplot(tweets_text.df2$sentiment)
+# tweets_text.df2[tweets_text.df2$sentiment < 0,]
+```
+
+```{r}
+update_sentiment <- function(x) {
+    # print("status")
+    # cat('status :', x[['status_id']], ' .\n\n')
+    # cat('sentiment :', x[['sentiment']], ' .\n\n')
+    # cat('Query: ',paste0("{status_id:'",x[["status_id"]],"'} \n\n"))
+    # cat('Update: ', paste0("{'$set':{'sentiment': '",x[["sentiment"]],"'}} \n\n"))
+    
+      # query = paste0("[{'$match': {status_id:'",x[["status_id"]],"'}}]"), 
+    tweets$update(
+      query = paste0('{"status_id":"',x[["status_id"]], '"}'), 
+      update = paste0('{"$set":{"sentiment": "',x[["sentiment"]],'"}}'), 
+      upsert = FALSE, multiple = FALSE
+    )
+    # cat('--Actualizado--.\n\n')
+}
+```
+
+
+```{r}
+apply(tweets_text.df2[,c('status_id', 'sentiment')], 1, update_sentiment)
+```

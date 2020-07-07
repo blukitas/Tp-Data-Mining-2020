@@ -1,0 +1,28 @@
+- Vista usuarios:
+	> Creador/difusor
+- Guardar a mongo
+
+1) 
+2) Sobre el Tweet - Popularidad
+	> Check favourites_count
+	> RT 
+		> Popularidad como favourites_count/RT_count?
+		
+	> Que variables	
+		> Fecha - Dia/Hora (Mañana, tarde, noche)
+		> *Source como categorico (Filtrar ruido - Top 12 + 'otros')
+		> Texto
+			> *Sentimiento
+			> *Positivo/Negativo/Neutro			
+		> Hashtag
+3) Sobre usuarios 
+	> Popularidad
+	> Followers/Friends
+	> Post/year
+	> Difusor/Creador
+4) ?
+	> Texto
+		> Sentimiento
+		> Positivo/Negativo/Neutro
+	> Hashtag
+> Hashtag por tweet?

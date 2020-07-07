@@ -1,0 +1,315 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Librerías
+
+```{r}
+library("ggplot2")
+library("readr")
+library("dplyr")
+library("highcharter")
+library("treemap")
+library("modeest")
+library("GGally")
+library("tidyverse")
+library("hrbrthemes")
+library("tidyr")
+library("VIM")
+library("e1071")
+library("mice")
+library("mongolite")
+
+library("SnowballC")
+library("tm", exclude = "inspect")
+library("twitteR")
+library("syuzhet")
+
+library("lubridate")
+
+library("RColorBrewer")
+#library("infotheo"); # Discretize variable
+
+library('dplyr')
+library('tm')
+library('stringr')
+library('stringi')
+library('arules')
+#install.packages("arulesViz", type = "source")
+library('arulesViz')
+
+```
+
+## Referencia tweets
+```{r}
+
+tweets <- mongo(collection = "query_compleja", db = "DMUBA")
+```
+
+# ------------------ Hashtags --------------------------
+# consulta
+
+```{r}
+df_user_features = tweets$find()
+```
+
+```{r}
+summary(df_user_features)
+```
+
+# Parentesis para discretizar followers ratio
+
+```{r}
+e <- 0.000001 
+  
+  df_user_features$followers_friends_ratio_log <- log10(df_user_features$followers_friends_ratio + e)
+  df_user_features$postsXyear_log <- log10(df_user_features$postsXyear + e)
+
+  bin_eq_freq <- infotheo::discretize(df_user_features$followers_friends_ratio_log,"equalwidth", 5)
+  bin_eq_freq$followers_friends_ratio_log = df_user_features$followers_friends_ratio_log
+
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:5){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$followers_friends_ratio_log[ bin_eq_freq$X==bin])
+}
+
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$followers_friends_ratio_log) , type = "p", col="red", 
+     ylab = "followers_friends_ratio_log", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
+
+
+  bin_eq_freq <- infotheo::discretize(df_user_features$postsXyear_log,"equalwidth", 5)
+  bin_eq_freq$postsXyear_log = df_user_features$postsXyear_log
+
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:5){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$postsXyear_log[ bin_eq_freq$X==bin])
+}
+
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$postsXyear_log) , type = "p", col="red", 
+     ylab = "postsXyear_log", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
+```
+
+```{r}
+df_user_features$cat_popular = arules::discretize(df_user_features$followers_friends_ratio_log, breaks=5, labels=c("muy pocos", "pocos", "medio", "muchos", "muy muchos"))
+df_user_features$cat_activo = arules::discretize(df_user_features$postsXyear_log, breaks=5, labels=c("muy pocos", "pocos", "medio", "muchos", "muy muchos"))
+
+```
+
+
+
+```{r}
+names(df_user_features)
+```
+
+# limpieza
+
+```{r}
+# Se quitan acentos
+df_user_features$cat_hashtag = stri_trans_general(df_user_features$cat_hashtag, "Latin-ASCII")
+# Se quita todo lo que no es alfanumÃ©rico
+df_user_features$cat_hashtag = gsub("[^a-zA-z0-9]", "", df_user_features$cat_hashtag)
+# se agrega prefijo de tipo de Ã�tem hashtag:
+df_user_features$item = paste0("hashtag=", df_user_features$cat_hashtag)
+
+# df_ht = df_ht[c("user_id", "item")]
+
+# A las transacciones con hashtags se les agregan los atributos del usuario.
+#df_tuples = rbind(df_user_tuples, df_ht)
+
+
+```
+
+
+```{r}
+
+df_user_tuples = df_user_features %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+  
+# se agrega prefijo de tipo de Ã�tem:
+df_user_tuples = df_user_tuples %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+
+length(unique(df_user_tuples$user_id))
+
+```
+
+```{r}
+names(df_user_features) 
+
+columnas_transacciones <- c(
+  "cat_created_at_momento", 
+  "cat_created_at_dia",
+  #"cat_retweet_created_at_momento",
+  #"cat_retweet_created_at_dia",
+  "cat_hashtag",
+  "cat_activo",
+  "cat_popular",
+  #"cat_RT_popular",
+  #"cat_dateDifference"
+)
+```
+## Correlacion datos numericos
+```{r}
+num_cols <- unlist(lapply(df_user_features, is.numeric))  
+# ggpairs(df_user_features[,num_cols])
+# No hay ninguna correlacion fuerte acá.
+```
+
+```{r}
+  cat_cols <- c(
+                "cat_created_at_momento", 
+                "cat_created_at_dia",
+                "cat_retweet_created_at_momento",
+                "cat_retweet_created_at_dia",
+                "cat_activo",
+                "cat_popular",
+                "cat_RT_popular")
+
+library(MASS)
+# for (i in cat_cols) {
+#   for (j in cat_cols) { 
+#   print("------------------------------------------------------------------")
+#   cat("Chi cuadrado para categorica: ", i, " con ", j)
+#   if (i == j) {
+#     print("Misma col")
+#   } else {
+#     tbl_cont = table(df_user_features[[i]], df_user_features[[j]])
+#     print(tbl_cont)
+#     chi_aux <- chisq.test(tbl_cont)
+#     print(chi_aux)
+#   } 
+# }
+# }
+
+  
+```
+
+
+```{r}
+
+# reglas de asociaciÃ³n
+trans <- as(split(df_user_tuples$item, df_user_tuples$user_id), "transactions")
+arules::inspect(trans[100])
+
+trans <- as(df_user_features[columnas_transacciones], "transactions")
+rules = apriori(trans, parameter=list(target="rule", support=0.01, confidence=0.02))
+print(rules)
+arules::inspect(sort(rules, by="lift", decreasing = TRUE))
+
+```
+
+```{r}
+plot(rules, measure = c("support", "lift"), shading = "confidence")
+```
+
+
+```{r}
+plot(rules, method = "two-key plot")
+```
+```{r}
+itemFrequencyPlot(trans, topN=10, type="absolute", main="Item Frequency") # plot frequeitemFrequencyPlot(Groceries, topN=10, type="absolute", main="Item Frequency") # plot freque
+```
+
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 3 & (support > 0.07 & support < 0.4)))
+arules::inspect(head(aux, 50))
+```
+
+# Sabado, noche, impopular, RT tienen bastante en común.
+
+
+```{r}
+rules = apriori(trans, parameter=list(target="rule", support=0.001, confidence=0.5))
+print(rules)
+
+```
+
+```{r}
+arules::inspect(sort(rules, by="lift", decreasing = TRUE)[1:20])
+
+```
+
+```{r}
+arules::inspect(head(rules, 20))
+
+```
+
+### ----- Tratamiento de Textos ------------
+
+```{r}
+df_text = tweets$find(query = '{}',  fields = '{"user_id" : true, "text" : true, "_id": false}')
+
+# Se quitan caracteres no alfanumÃ©ricos (por cuestiones de errores en RStudio)
+df_text$text <- gsub("[^[:alnum:][:blank:]?&/\\-]", "", df_text$text)
+df_text$text <- gsub("U00..", "", df_text$text)
+
+# --- limpieza de textos
+# Se quitan acentos
+df_text$text = stri_trans_general(df_text$text, "Latin-ASCII")
+# Se pasa a minusculas
+df_text$text = tolower(df_text$text)
+# Se quita puntuacion
+df_text$text = removePunctuation(df_text$text)
+# Se quitan nÃºmeros
+df_text$text = removeNumbers(df_text$text)
+# se quitan espacios extras
+df_text$text =  stripWhitespace(df_text$text)
+# se quitan espacios al principio y final de la cadena
+df_text$text = str_trim(df_text$text)
+# sin stop words
+df_text$text = removeWords(df_text$text, stopwords("spanish"))
+
+# se separa el texto en tÃ©rminos
+df_text$words = tokenizers::tokenize_words(df_text$text, simplify = T)
+# se pasa a formato pares: user-tÃ©rmino
+df_text = df_text %>% select("user_id", "words")  %>% unnest(words) %>%  distinct()
+# se agrega prefijo de tipo de Ã�tem:
+df_text$item = paste0("word=", df_text$words)
+
+# reglas
+trans <- as(split(df_text$item, df_text$user_id), "transactions")
+print(trans)
+```
+
+```{r}
+rules = apriori(trans, parameter=list(target="rule", support=0.01, confidence=0.2))
+print(rules)
+
+```
+
+```{r}
+rules.filter = arules::subset(rules, subset = (lift > 10 & lift < 40))
+
+```
+
+```{r}
+head(arules::inspect(rules), n= 100)
+```
+
+```{r}
+plot(rules.filter, measure = c("support", "lift"), shading = "confidence")
+```
+
+```{r}
+plot(rules.filter, method = "two-key plot")
+```
+

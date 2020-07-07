@@ -1,0 +1,143 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+# Retweets:
+
+```{r}
+tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
+```
+
+```{r}
+df_user_features = tweets$find()
+```
+
+
+```{r}
+df_user_features$cat_popular = arules::discretize(df_user_features$followers_friends_ratio, breaks=5, labels=c("muy pocos", "pocos", "amigos medios", "muchos", "muy muchos"))
+df_user_features$cat_activo = arules::discretize(df_user_features$postsXyear, breaks=5, labels=c("muy pocos", "pocos", "actividad normal", "muchos", "muy muchos"))
+df_user_features$cat_RT_popular = arules::discretize(df_user_features$RT_followers_friends_ratio, breaks=5, labels=c("muy pocos", "pocos", "medio", "muchos", "muy muchos"))
+df_user_features$cat_dateDifference = arules::discretize(df_user_features$dateDifference_m, breaks=5, labels=c("inmediato", "poco", "tiempo normal", "largo", "desde el pasado"))
+
+df_user_features$cat_retweet_favorite_count = arules::discretize(df_user_features$retweet_favorite_count, breaks=3, labels=c("poco impacto", "impacto normal", "mucho impacto"))
+df_user_features$cat_retweet_retweet_count = arules::discretize(df_user_features$retweet_retweet_count, breaks=3, labels=c("poca replica", "replica normal", "mucha replica"))
+
+```
+
+```{r}
+df_user_features$cat_retweet_verified <- ifelse(df_user_features$cat_retweet_verified, "Verificados", "Sin verificar")
+df_user_features$cat_retweet_verified <- as.factor(df_user_features$cat_retweet_verified)
+```
+
+
+
+```{r}
+names(df_user_features) 
+
+columnas_transacciones <- c(
+  "cat_created_at_momento", 
+  "cat_created_at_dia",
+  "cat_retweet_created_at_momento",
+  "cat_retweet_created_at_dia",
+  "cat_activo",
+  "cat_popular",
+  "cat_RT_popular",
+  "cat_retweet_favorite_count",
+  "cat_dateDifference",
+  "cat_retweet_verified"
+)
+```
+
+
+```{r}
+
+df_user_tuples = df_user_features %>% 
+  pivot_longer(
+    #cols = columnas_transacciones,
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+    dplyr::select("user_id", "feat", "val")
+#df_user_tuples = df_user_tuples[ c("user_id", "feat", "val") ]
+  
+names(df_user_tuples)
+# se agrega prefijo de tipo de Ã�tem:
+df_user_tuples <- df_user_tuples %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  dplyr::select("user_id", "item")
+
+length(unique(df_user_tuples$user_id))
+
+```
+## Correlacion datos numericos
+```{r}
+num_cols <- unlist(lapply(df_user_features, is.numeric))  
+# ggpairs(df_user_features[,num_cols])
+# No hay ninguna correlacion fuerte acá.
+```
+
+```{r}
+  cat_cols <- c(
+                "cat_created_at_momento", 
+                "cat_created_at_dia",
+                "cat_retweet_created_at_momento",
+                "cat_retweet_created_at_dia",
+                "cat_activo",
+                "cat_popular",
+                "cat_RT_popular")
+
+library(MASS)
+# for (i in cat_cols) {
+#   for (j in cat_cols) { 
+#   print("------------------------------------------------------------------")
+#   cat("Chi cuadrado para categorica: ", i, " con ", j)
+#   if (i == j) {
+#     print("Misma col")
+#   } else {
+#     tbl_cont = table(df_user_features[[i]], df_user_features[[j]])
+#     print(tbl_cont)
+#     chi_aux <- chisq.test(tbl_cont)
+#     print(chi_aux)
+#   } 
+# }
+# }
+
+  
+```
+
+
+```{r}
+
+# reglas de asociaciÃ³n
+trans <- as(split(df_user_tuples$item, df_user_tuples$user_id), "transactions")
+#arules::inspect(trans[100])
+
+#trans <- as(df_user_features[columnas_transacciones], "transactions")
+rules = apriori(trans, parameter=list(target="rule", support=0.01, confidence=0.02))
+#print(rules)
+#arules::inspect(sort(rules, by="lift", decreasing = TRUE))
+
+```
+
+```{r}
+plot(rules, measure = c("support", "lift"), shading = "confidence")
+```
+
+
+```{r}
+plot(rules, method = "two-key plot")
+```
+
+```{r}
+itemFrequencyPlot(trans, topN=10, type="absolute", main="Item Frequency") # plot frequeitemFrequencyPlot(Groceries, topN=10, type="absolute", main="Item Frequency") # plot freque
+```
+
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.2 & (support > 0.15)))
+arules::inspect(head(aux, 50))
+```
