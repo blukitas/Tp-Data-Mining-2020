@@ -50,7 +50,7 @@ tweets <- mongo(collection = "tweets_lower", db = "DMUBA")
 # Tweets ya transformados
 # tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":{"$exists":"true","$ne":""}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text","text_limpio":"$text_limpio"}}]')
 # Tweets sin transformar
-tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":1000}]')
+tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":5000}]')
 ```
 
 
