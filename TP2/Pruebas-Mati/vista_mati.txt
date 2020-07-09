@@ -1,36 +1,54 @@
-db.tweets_mongo_covid19.aggregate([
-    {
-        "$match": { is_retweet: { "$eq": true} }
-    }, {        
-        
-        "$group": {
-            "_id": "$retweet_status_id",
-            "retweet_status_id": { "$max": "$retweet_status_id" },
-            "retweet_user_id": {"$max" : "$retweet_user_id"},
-            "user_id" : {"$max": "$user_id"},
-            "cant_RT": {
-                $sum: 1
-            },        
-        },
-    }, {
-            "$project" : {
-                
-                "retweet_status_id": "$retweet_status_id",
-                "cant_RT": "$cant_RT",
-                "retweet_user_id": "$retweet_user_id",
-                "user_id" : "$user_id"
-                
-            }
-        },
-   
-    {
-        "$match": { user_id: { "$eq": "$retweet_user_id"} }
-    },{
-        "$project": {
-            
-            "user_id" : 1,
-            "cant_RT": 1
-            
-        }
-    },    
-])
+db.tweets_mongo_covid19.aggregate([{
+            "$match": {
+                is_retweet: {
+                    "$eq": true
+                }
+            }
+        }, {
+            "$group": {
+                "_id": "$retweet_status_id",
+                "retweet_status_id": {
+                    "$max": "$retweet_status_id"
+                },
+                "retweet_user_id": {
+                    "$max": "$retweet_user_id"
+                },
+                "user_id": {
+                    "$max": "$user_id"
+                },
+                "cant_RT": {
+                    $sum: 1
+                },
+            },
+        }, {
+            "$project": {
+
+                "retweet_status_id": "$retweet_status_id",
+                "cant_RT": "$cant_RT",
+                "retweet_user_id": "$retweet_user_id",
+                "user_id": "$user_id"
+
+            }
+        }, {
+            $lookup: {
+                from: "users_mongo_covid19",
+                localField: "user_id",
+                foreignField: "user_id",
+                as: "join_usuarios"
+            }
+        },
+        {
+            "$match": {
+                join_usuarios: {
+                    "$exists": true
+                }
+            }
+        }, {
+                "$project": {
+
+                    "user_id": 1,
+                    "cant_RT": 1,
+                    "join_usuarios": 1
+                }
+        },
+])
