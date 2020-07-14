@@ -1,0 +1,610 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tm)
+library(mongolite)
+library(stringr)
+library(stringi)
+library(tidyr)
+library(dplyr)
+library(arules)
+```
+
+
+```{r}
+usuarios_tweets <- mongo(collection ="usuarios_tweet", db = "DMUBA")
+usuarios_B <- mongo(collection = "usuarios_B", db="DMUBA")
+#usuarios_tweet_type <- mongo(collection = "usuarios_tweet_type", db="DMUBA")
+
+usuarios_retweeteados <- mongo(collection ="usuarios_retweet", db = "DMUBA")
+#usuarios_retweeteados <- mongo(collection ="usuarios_retweet_test", db = "DMUBA")
+#usuarios_retweeteadores <- mongo(collection ="usuarios_retweeteadores", db = "DMUBA")
+```
+
+
+```{r}
+
+df_usuarios_tweets <- usuarios_tweets$find()
+df_usaurios_friends <- usuarios_friends_count$find()
+df_usuarios_retweeteados <- usuarios_retweeteados$find()
+
+df_usuarios_tweets <- right_join(df_usaurios_friends,df_usuarios_tweets , by="user_id")
+
+#df_usuarios_tweet_type <- usuarios_tweet_type$find()
+#df_usuarios_retweeteadores <- usuarios_retweeteadores$find()
+
+```
+
+```{r}
+#colnames(df_usuarios_tweets)
+#length(unique(df_usuarios_tweets$user_id)) #283129 total usuarios
+
+#colnames(df_usuarios_retweets)  
+#length(unique(df_usuarios_retweets$user_id)) #51487 total usuarios retweeteado
+#nrow(df_usuarios_retweets)
+
+#df_retweeteados <- df_usuarios_tweets[df_usuarios_retweets$user_id %in% df_usuarios_tweets$user_id,] #155294
+#nrow(df_retweeteados)
+#length(unique(df_retweeteados$user_id))
+
+#length(unique(df_usuarios_retweeteadores$user_id))
+```
+
+
+# popularidad
+```{r}
+summary(df_usuarios_tweets$popularidad)
+#hist(df_usuarios_tweets$popularidad, ylab ="Frecuencia", main="popularidad \n SIN transformación")
+#rug(jitter(df_usuarios_tweets$Afinidad))
+#df_usuarios_tweets$popularidad <- df_usuarios_tweets$popularidad + 0.00001
+
+```
+
+```{r}
+df_usuarios_tweets$popularidad_scal <- log10((df_usuarios_tweets$popularidad - min(df_usuarios_tweets$popularidad)) / (max(df_usuarios_tweets$popularidad) - min(df_usuarios_tweets$popularidad)))
+
+#boxplot((df_usuarios_tweets$popularidad), main=" log10 popularidad")
+#boxplot((popularidad_scal), main="log10 popularidad")
+```
+
+```{r}
+#hist(df_usuarios_tweets$popularidad_scal, xlab="Afinidad", ylab ="Frecuencia", main="popularidad con transformación log10")
+#rug(jitter(df_usuarios_tweets$popularidad_scal))
+```
+```{r}
+#min = min(df_usuarios_tweets$Afinidad)
+#min
+#max(df_usuarios_tweets$popularidad_scal)
+#X <- 0.000000501187
+#X <- (X * max(df_usuarios_tweets$popularidad) - min(df_usuarios_tweets$popularidad)) + #min(df_usuarios_tweets$popularidad)
+#X
+#Y <- log10((1.75 - min(df_usuarios_tweets$popularidad)) / (max(df_usuarios_tweets$popularidad) - min(df_usuarios_tweets$popularidad)))
+#Y
+```
+
+
+
+```{r}
+K <- df_usuarios_tweets[,'popularidad_scal'] 
+
+df_usuarios_tweets$popularidad_scal_c <- cut(K, c(-Inf, -6.835419,-6.534385, -6.291345, Inf),labels = c("muy_baja", "baja", "intermedia", "alta"))
+
+barplot(table(df_usuarios_tweets$popularidad_scal_c), main="popularidad", las=2 )
+```
+
+#muy baja < 0.5
+#baja 0.5 - 1
+# intermedia 1 -1.75
+#alta > 1.75
+
+
+# Afinidad (me gusta / posteos)
+```{r}
+summary(df_usuarios_tweets$Afinidad)
+hist(df_usuarios_tweets$Afinidad, ylab ="Frecuencia", main="Afinidad \n SIN transformación")
+rug(jitter(df_usuarios_tweets$Afinidad))
+
+```
+
+```{r}
+#min = min(df_usuarios_tweets$Afinidad)
+#min
+#X <- 0.0001
+#X <- (X * max(df_usuarios_tweets$Afinidad) - min(df_usuarios_tweets$Afinidad)) + min(df_usuarios_tweets$Afinidad)
+#X
+#Y <- log10((1 - min(df_usuarios_tweets$Afinidad)) / (max(df_usuarios_tweets$Afinidad) - min(df_usuarios_tweets$Afinidad)))
+#Y
+
+df_usuarios_tweets$Afinidad_scal <- log10((df_usuarios_tweets$Afinidad - min(df_usuarios_tweets$Afinidad)) / (max(df_usuarios_tweets$Afinidad) - min(df_usuarios_tweets$Afinidad)))
+boxplot((df_usuarios_tweets$Afinidad_scal), main=" log10 Afinidad")
+```
+
+```{r}
+
+hist(df_usuarios_tweets$Afinidad_scal, xlab="Afinidad", ylab ="Frecuencia", main="Afinidad con transformación log10")
+rug(jitter(df_usuarios_tweets$Afinidad_scal))
+```
+
+```{r}
+K <- df_usuarios_tweets[,'Afinidad_scal'] 
+
+df_usuarios_tweets$Afinidad_scal_c <- cut(K, c(-Inf, -4, -3.41, -3,  Inf),labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_usuarios_tweets$Afinidad_scal_c), main="Afinidad", las=2 )
+```
+
+# baja < 0.25  "cada 4 posteos 1 me gusta"
+#intermedia (0.25 - 1)
+# alta ( 1 - 2.5)
+# muy alta ( 2.5 >) "mas de 2.5 me gusta por posteos"
+
+
+# followers
+```{r}
+
+#summary(df_usuarios_tweets$followers_count)
+#hist(df_usuarios_tweets$followers_count, ylab ="Frecuencia", main="followers \n SIN transformación")
+#rug(jitter(df_usuarios_tweets$followers_count))
+#df_usuarios_tweets
+```
+```{r}
+#boxplot(log10(df_usuarios_retweeteados$popularidad+1), main=" log10 popularidad")
+#boxplot(log10(df_usuarios_tweets$followers_count+1), main=" log10 followers")
+```
+
+```{r}
+df_usuarios_tweets$followers_log10 <- log10(df_usuarios_tweets$followers_count+1)
+hist(df_usuarios_tweets$followers_log10, xlab="followers_log10", ylab ="Frecuencia", main="followers con transformación log10")
+rug(jitter(df_usuarios_tweets$followers_log10))
+```
+# discretizacion follower
+```{r}
+K <- df_usuarios_tweets[,'followers_log10'] 
+
+  df_usuarios_tweets$followers_log10_c <- cut(K, c(-Inf, 1.69, 2.39, 3, Inf), labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_usuarios_tweets$followers_log10_c), main="followers", las=2 )
+```
+# baja < 50
+# intermedia 50-250
+# alta 250 - 1000
+# muy alta > 1000
+
+
+#Me_gusta
+```{r}
+#summary(df_usuarios_retweeteados$actividad)
+hist(df_usuarios_tweets$favourites_count, ylab ="Frecuencia", main="Me gusta \n SIN transformación")
+rug(jitter(df_usuarios_tweets$favourites_count))
+```
+
+```{r}
+boxplot(log10(df_usuarios_tweets$favourites_count+1), main=" log10 me gusta")
+```
+```{r}
+df_usuarios_tweets$favourites_count_log10 <- log10(df_usuarios_tweets$favourites_count+1)
+hist(df_usuarios_tweets$favourites_count_log10, xlab="favourites_log10", ylab ="Frecuencia", main="favourites con transformación log10")
+rug(jitter(df_usuarios_tweets$favourites_count_log10))
+```
+```{r}
+K <- df_usuarios_tweets[,'favourites_count_log10'] 
+
+df_usuarios_tweets$favourites_count_log10_c <- cut(K, c(-Inf,2.69, 3.69, 4.3, Inf), labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_usuarios_tweets$favourites_count_log10_c), main="favourites", las=2 )
+```
+# baja < 500
+# intermedia 500 - 5000
+# alta 5000- 20000
+# muy alta > 20000
+
+#actividad
+```{r}
+#summary(df_usuarios_retweeteados$actividad)
+hist(df_usuarios_tweets$actividad, ylab ="Frecuencia", main="actividad \n SIN transformación")
+rug(jitter(df_usuarios_tweets$actividad))
+```
+
+```{r}
+boxplot(log10(df_usuarios_tweets$actividad+1), main=" log10 actividad")
+
+```
+
+```{r}
+df_usuarios_tweets$actividad_log10 <- log10(df_usuarios_tweets$actividad+1)
+hist(df_usuarios_tweets$actividad_log10, xlab="actividad_log10", ylab ="Frecuencia", main="actividad con transformación log10")
+rug(jitter(df_usuarios_tweets$actividad_log10))
+```
+
+```{r}
+K <- df_usuarios_tweets[,'actividad_log10'] 
+
+df_usuarios_tweets$actividad_log10_c <- cut(K, c(-Inf,2.55, 3.08, 3.68, Inf), labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_usuarios_tweets$actividad_log10_c), main="actividad", las=2 )
+```
+# baja < 1 tweets por dia
+#intemedia 120-1200 1 - 3,33 tweets x dia
+# alta 1200-4800 3,33 - 13,33 tweets por dia
+# muy alta mas 13.33 tweets por dia
+
+
+# friends_count
+```{r}
+#summary(df_usuarios_retweeteados$actividad)
+hist(df_usuarios_tweets$friends_count, ylab ="Frecuencia", main="friends_count \n SIN transformación")
+rug(jitter(df_usuarios_tweets$friends_count))
+```
+
+```{r}
+boxplot(log10(df_usuarios_tweets$friends_count +1), main=" log10 friends")
+```
+
+
+```{r}
+
+df_usuarios_tweets$friends_count_log10 <- log10(df_usuarios_tweets$friends_count+1)
+hist(df_usuarios_tweets$friends_count_log10, xlab="friends_count_log10", ylab ="Frecuencia", main="friends_count con transformación log10")
+rug(jitter(df_usuarios_tweets$friends_count_log10))
+
+```
+
+```{r}
+K <- df_usuarios_tweets[,'friends_count_log10'] 
+
+df_usuarios_tweets$friends_count_log10_c <- cut(K, c(-Inf,2,2.6989, 3.301, Inf), labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+barplot(table(df_usuarios_tweets$friends_count_log10_c), main="friends", las=2 )
+```
+
+# baja < menos de 100
+# intermedia 100- 500
+# alta 500- 2000
+# muy alta > 2000
+
+# rules 
+```{r}
+# rules sin popularidad
+colnames(df_usuarios_tweets)
+df_rules <- df_usuarios_tweets[c(1, 10,12,14,16,18)]
+colnames(df_rules) <- c("user_id","cat_afinidad", "cat_seguidores", "cat_favourites", "cat_actividad", "cat_amigos")
+
+# rules con popularidad sin seguidores ni amigos
+df_rules <- df_usuarios_tweets[c(1, 10, 20 ,16, 14, 18)]
+colnames(df_rules) <- c("user_id","cat_afinidad", "cat_popularidad_user", "cat_actividad", "cat_favourites",  "cat_amigos")
+
+colnames(df_rules)
+
+```
+
+
+```{r}
+df_tuples = df_rules %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+
+#head(df_tuples)
+
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples = df_tuples %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+
+# Cantidad de transacciones (son los user_id Ãºnicos)
+length(unique(df_tuples$user_id))
+```
+
+
+```{r}
+# Generamos las transacciones
+trans <- as(split(df_tuples$item, df_tuples$user_id), "transactions")
+
+inspect(trans[10])
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules = apriori(trans, parameter=list(target="rule", support=0.01, confidence=0.6, maxlen=4, minlen=2))
+
+print(rules)
+
+# find redundant rules
+rules.sorted <- sort(rules, by="lift", decreasing = TRUE)
+
+
+inspect(sort(rules, by="lift", decreasing = TRUE))
+
+#popularidad_rules = subset(rules, subset = rhs %pin% "popularidad")
+#followers_rules = subset(rules, subset = !(lhs  %pin% "amigos=muy_alta") & rhs  %pin% "seguidores=")
+#followers_rules = subset(rules, subset = rhs  %pin% "seguidores=")
+#favourites_rules = subset(rules, subset = !(lhs  %pin% "afinidad=") & rhs  %pin% "favourites=")
+afinidad_rules = subset(rules, subset =  rhs  %pin% "afinidad=")
+
+print(afinidad_rules)
+
+inspect(sort(afinidad_rules, by="lift", decreasing = TRUE))
+```
+
+
+#df_rules_2 sin popularidad con usuarios retweeteados
+```{r}
+df_rules_2 <- inner_join(df_rules, df_usuarios_retweeteados, by="user_id")
+df_rules_2$cant_RT <- NULL
+```
+
+
+```{r}
+
+df_tuples_2 = df_rules_2 %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+
+#head(df_tuples)
+
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples_2 = df_tuples_2 %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+
+# Cantidad de transacciones (son los user_id Ãºnicos)
+length(unique(df_tuples_2$user_id))
+```
+
+```{r}
+# Generamos las transacciones
+trans_2 <- as(split(df_tuples_2$item, df_tuples_2$user_id), "transactions")
+
+inspect(trans[10])
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules_2 = apriori(trans_2, parameter=list(target="rule", support=0.01, confidence=0.6, maxlen=5, minlen=2))
+
+print(rules_2)
+
+View(inspect(sort(rules_2, by="lift", decreasing = TRUE)))
+
+afinidad_rules = subset(rules_2, subset =  rhs  %pin% "seguidores=")
+
+print(afinidad_rules)
+
+inspect(sort(afinidad_rules, by="lift", decreasing = TRUE))
+```
+
+# df_rules_3 sin afinidad ni popularidad retweeteados
+```{r}
+df_rules_2 <- inner_join(df_rules, df_usuarios_retweeteados, by="user_id")
+df_rules_2$cant_RT <- NULL
+df_rules_3 <- df_rules_2
+df_rules_3$cat_afinidad <- NULL
+
+```
+
+
+```{r}
+df_tuples_3 = df_rules_3 %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+
+#head(df_tuples)
+
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples_3 = df_tuples_3 %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+
+# Cantidad de transacciones (son los user_id Ãºnicos)
+length(unique(df_tuples_2$user_id))
+
+```
+
+
+
+```{r}
+# Generamos las transacciones
+trans_3 <- as(split(df_tuples_3$item, df_tuples_3$user_id), "transactions")
+
+inspect(trans[10])
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules_3 = apriori(trans_3, parameter=list(target="rule", support=0.01, confidence=0.6, maxlen=4, minlen=2))
+
+print(rules_3)
+
+View(inspect(sort(rules_3, by="lift", decreasing = TRUE)))
+
+favorites_rules = subset(rules_3, subset =  lhs  %pin% "actividad=baja")
+
+print(favorites_rules)
+
+inspect(sort(favorites_rules, by="lift", decreasing = TRUE))
+```
+
+
+# df_rules_4 sin popularidad pero con user TW y RT
+```{r}
+# sampleo
+
+# cantidad TW
+nrow(df_usuarios_tweet_type[df_usuarios_tweet_type$tweet_type == 'TW',])
+
+# sampleo 59715
+df_RT <- df_usuarios_tweet_type[df_usuarios_tweet_type$tweet_type == 'RT', ]
+df_RT_sample <- df_RT[sample(nrow(df_RT), 59715),]
+
+df_TW <- df_usuarios_tweet_type[df_usuarios_tweet_type$tweet_type == 'TW',]
+
+df_usuarios_tweet_type_balanceada <- rbind(df_TW, df_RT_sample )
+nrow(df_usuarios_tweet_type_balanceada[df_usuarios_tweet_type_balanceada$tweet_type == 'RT',])
+nrow(df_usuarios_tweet_type_balanceada)
+
+
+nrow(df_rules_3)
+df_rules_4 <- inner_join(df_rules, df_usuarios_tweet_type_balanceada, by="user_id")
+
+nrow(df_rules_4[df_rules_4$tweet_type == 'RT',])
+
+colnames(df_rules_4)
+
+colnames(df_rules_4)[7] <- "cat_tweet_type"
+
+df_rules_4$cat_afinidad <- NULL  
+
+```
+
+
+
+```{r}
+df_tuples_4 = df_rules_4 %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+
+#head(df_tuples)
+
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples_4 = df_tuples_4 %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+```
+
+```{r}
+trans_4 <- as(split(df_tuples_4$item, df_tuples_4$user_id), "transactions")
+
+inspect(trans[10])
+
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules_4 = apriori(trans_4, parameter=list(target="rule", support=0.01, confidence=0.6, maxlen=5, minlen=2))
+
+print(rules_4)
+
+inspect(sort(rules_4, by="lift", decreasing = TRUE))
+
+tweet_type_rules = subset(rules_4, subset =  (rhs  %pin% "tweet_type=TW") | (rhs  %pin% "tweet_type=RT"))
+
+print(tweet_type_rules)
+
+View(inspect(sort(tweet_type_rules, by="lift", decreasing = TRUE)))[50]
+```
+
+
+```{r}
+colnames(df_usuarios_retweeteados)
+nrow(df_usuarios_retweeteados)
+
+#df_usuarios_retweeteados$retweet_retweet_count_z <- scale(df_usuarios_retweeteados$retweet_retweet_count, center=TRUE, scale=TRUE)
+df_usuarios_retweeteados$retweet_retweet_count_s <- (df_usuarios_retweeteados$retweet_retweet_count - min(df_usuarios_retweeteados$retweet_retweet_count)) / (max(df_usuarios_retweeteados$retweet_retweet_count) - min(df_usuarios_retweeteados$retweet_retweet_count))
+
+#df_usuarios_retweeteados$retweet_favorite_count_z <- scale(df_usuarios_retweeteados$retweet_favorite_count, center=TRUE, scale=TRUE)
+df_usuarios_retweeteados$retweet_favorite_count_s <- (df_usuarios_retweeteados$retweet_favorite_count - min(df_usuarios_retweeteados$retweet_favorite_count)) / (max(df_usuarios_retweeteados$retweet_favorite_count) - min(df_usuarios_retweeteados$retweet_favorite_count))
+
+# popularidad como promedio de retweet_favorite_count y retweet_retweet_count normalizadas previamente
+
+df_usuarios_retweeteados$popularidad <- (df_usuarios_retweeteados$retweet_retweet_count_s + df_usuarios_retweeteados$retweet_favorite_count_s) /2
+
+df_usuarios_retweeteados$popularidad <- df_usuarios_retweeteados$popularidad + 0.000001
+df_usuarios_retweeteados$popularidad_log10 <- log10(df_usuarios_retweeteados$popularidad)
+#hist(df_usuarios_retweeteados$popularidad)
+#summary(df_usuarios_retweeteados$popularidad)
+#min(df_usuarios_retweeteados$popularidad)
+#boxplot(log10(df_usuarios_retweeteados$popularidad))
+hist(log10(df_usuarios_retweeteados$popularidad))
+```
+```{r}
+K <- df_usuarios_retweeteados[,'popularidad_log10'] 
+
+df_usuarios_retweeteados$popularidad_log10_c <- cut(K, c(-Inf,-5, -4, Inf) , labels = c("baja", "intermedia", "alta"))
+
+barplot(table(df_usuarios_retweeteados$popularidad_log10_c), main="popularidad", las=2 )
+```
+
+#df_rules_5
+
+```{r}
+colnames(df_usuarios_retweeteados)
+df_popularidad <- df_usuarios_retweeteados[c(1,8)]
+colnames(df_popularidad)[2] <- "cat_popularidad"
+colnames(df_popularidad)
+nrow(df_popularidad)
+
+
+
+df_rules_5 <- inner_join(df_rules, df_popularidad, by="user_id")
+nrow(df_rules_5)
+
+barplot(table(df_rules_5$cat_popularidad))
+colnames(df_rules_5)
+colnames(df_rules_5)[6] <- "popularidad_tweet"
+# saco favourites
+df_rules_5$cat_favourites <- NULL 
+```
+
+```{r}
+df_tuples_5 = df_rules_5 %>% 
+  pivot_longer(
+    cols = starts_with("cat"),
+    names_to = "feat", 
+    values_to = "val", 
+    names_prefix = "cat_",
+    values_drop_na = TRUE) %>% 
+  select("user_id", "feat", "val")
+
+#head(df_tuples)
+
+
+# Se generan los pares TID ITEM (el TID es el user_id)
+df_tuples_5 = df_tuples_5 %>% 
+  mutate("item" = paste0(feat,"=",val)) %>% 
+  select("user_id", "item")
+```
+
+```{r}
+trans_5 <- as(split(df_tuples_5$item, df_tuples_5$user_id), "transactions")
+
+inspect(trans[10])
+
+
+# Buscamos reglas con min_sup=0.005 y min_conf=0.5
+# Además, se limitan la cantidad de ítems (orden) entre 2 y 9
+rules_5 = apriori(trans_5, parameter=list(target="rule", support=0.004, confidence=0.6, maxlen=3, minlen=2))
+
+print(rules_5)
+
+inspect(sort(rules_5, by="lift", decreasing = TRUE))
+
+
+popularidad_rules = subset(rules_5, subset = rhs  %pin% "popularidad=baja")
+
+print(popularidad_rules)
+
+inspect(sort(popularidad_rules, by="lift", decreasing = TRUE))
+```
+

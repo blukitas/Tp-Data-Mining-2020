@@ -1,0 +1,120 @@
+db.tweets_mongo_covid19.aggregate([
+     {        
+        
+        $group: {
+            
+            _id: "$user_id",
+            
+
+            "user_id" : {$first: "$user_id"},
+
+            "account_created_at": {"$max" : "$account_created_at"},
+            "statuses_count" :{"$max": "$statuses_count"},                   
+            "favourites_count": { "$max": "$favourites_count" },
+       
+        },
+    }, {
+            "$project" : {
+                "_id":0,
+                "user_id" : "$user_id",
+                
+                "actividad": {
+                                $divide: [
+                                                "$statuses_count", 
+                                                { $subtract: [
+                                                                    2021, 
+                                                                    {$year: "$account_created_at"}
+                                                                ]
+                                                }
+                                            ]
+                             },
+                                     
+               "Afinidad": {
+                                $divide: [
+                                                { $add: [
+                                                            "$favourites_count", 
+                                                            1
+                                                        ]           
+                                                 },                
+                                                 "$statuses_count"        
+                                                 
+                                         ]
+                
+                               },
+              "favourites_count": "$favourites_count" ,
+              "statuses_count": "$statuses_count",                
+
+        }  
+    },
+    { $out: "usuarios_tweet"}  
+])
+
+
+db.tweets_mongo_covid19.aggregate([
+    {
+        "$match": { is_retweet: { "$eq": true} }
+    }, {        
+        
+        "$group": {
+            _id: "$retweet_status_id",
+            "retweet_user_id": {$first : "$retweet_user_id"},
+            "cant_RT": {
+                $sum: 1
+            },        
+        },
+    }, {
+            "$project" : {
+                
+                "user_id" : "$retweet_user_id",
+                "cant_RT": "$cant_RT"            
+                
+            }
+        },  
+
+    { $out: "usuarios_retweet"}  
+])
+
+
+
+
+db.tweets_mongo_covid19.aggregate([
+     {        
+        
+        $group: {
+            
+            _id: "$user_id",
+            
+
+            "user_id" : {$first: "$user_id"},
+            "friends_count": { "$max": "$friends_count" },
+            "followers_count": { "$max": "$followers_count" },
+                     
+       
+        },
+    }, {
+            "$project" : {
+                "_id":0,
+                "user_id" : "$user_id",
+  
+                "friends_count": "$friends_count",
+                "followers_count": "$followers_count",
+                
+                "popularidad": {
+                                $divide: [
+                                                
+                                                "$followers_count",
+                                                { $add: [
+                                                            "$friends_count", 
+                                                            1
+                                                        ]           
+                                                 }                
+                                                         
+                                                 
+                                         ]
+                
+                              }
+                          
+        }  
+    },
+    { $out: "usuarios_B"}  
+])
