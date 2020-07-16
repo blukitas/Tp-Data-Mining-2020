@@ -1,0 +1,11 @@
+mongorestore --host localhost:27017 --gzip --archive="C:\data\tweets_mongo_covid19.gz"
+mongorestore --host localhost:27017 --gzip --archive="C:\data\users_covid_curso2020.gz" 
+
+c:\mongodb\bin\mongod.cfg
+ mongod --storageEngine wiredTiger --wiredTigerEngineConfigString="cache_size=200M"    
+ 
+ # Repair database
+  mongod --repair 
+ 
+ # Check en mongodb
+   db.serverStatus().wiredTiger.cache      

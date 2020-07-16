@@ -38,19 +38,22 @@ library(syuzhet)
 # Collection
 
 ```{r}
-#tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
-tweets <- mongo(collection = "tweets_lower", db = "DMUBA")
+tweets <- mongo(collection = "query_compleja_RT_Tiempos", db = "DMUBA")
+#tweets <- mongo(collection = "tweets_lower", db = "DMUBA")
 ```
 
 #Tweets
 
 ```{r}
-# tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","text":"$text"}},{"$limit": 1}]')
+tweets_text <- tweets$find()
+# tweets_text <- tweets$aggregate('[{"$limit": 100}]')
+# tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit": 100}]')
+# tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","text":"$text"}}]')
 # tweets_text <- tweets$aggregate('[{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit": 100}]')
 # Tweets ya transformados
 # tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":{"$exists":"true","$ne":""}}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text","text_limpio":"$text_limpio"}}]')
 # Tweets sin transformar
-tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":5000}]')
+#tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"_id":"$_id","status_id":"$status_id","text":"$text"}},{"$limit":30000}]')
 ```
 
 
@@ -58,13 +61,19 @@ tweets_text <- tweets$aggregate('[{"$match":{"text_limpio":null}},{"$project":{"
 summary(tweets_text)
 cat("Cant. de filas: ", nrow(tweets_text))
 ```
+
+```{r}
+names(tweets_text)
+```
+
+
 ```{r}
 tweets_text[1,]
 ```
 
 
 ```{r}
-tweets_text$cantChars <- nchar(tweets_text$text)
+tweets_text$cantChars <- nchar(tweets_text$retweet_text)
 summary(tweets_text)
 ```
 
@@ -86,18 +95,18 @@ summary(tweets_text)
 
 ```{r}
 tweets_text.df2 <- tweets_text
-tweets_text.df2$text <- gsub("http.*","",tweets_text.df2$text)
-tweets_text.df2$text <- gsub("https.*","",tweets_text.df2$text)
+tweets_text.df2$retweet_text <- gsub("http.*","",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- gsub("https.*","",tweets_text.df2$retweet_text)
 
 #Quitando los hashtags y usuarios en los tweets_text
-tweets_text.df2$text <- gsub("#\\w+","",tweets_text.df2$text)
-tweets_text.df2$text <- gsub("@\\w+","",tweets_text.df2$text)
+tweets_text.df2$retweet_text <- gsub("#\\w+","",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- gsub("@\\w+","",tweets_text.df2$retweet_text)
 
 ```
 
 
 ```{r}
-tweets_text.df2$cantChars <- nchar(tweets_text.df2$text)
+tweets_text.df2$cantChars <- nchar(tweets_text.df2$retweet_text)
 # ggplot(tweets_text.df2, aes(x=cantChars)) +
 #   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
 #   ggtitle("Night price distribution of Airbnb appartements") +
@@ -106,16 +115,16 @@ tweets_text.df2$cantChars <- nchar(tweets_text.df2$text)
 
 
 ```{r}
-tweets_text.df2$text <- gsub("[[:punct:]]","",tweets_text.df2$text)
-tweets_text.df2$text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$text)
-tweets_text.df2$text <- iconv(tweets_text.df2$text,from="UTF-8",to="ASCII//TRANSLIT"); #Sin acentos
+tweets_text.df2$retweet_text <- gsub("[[:punct:]]","",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- iconv(tweets_text.df2$retweet_text,from="UTF-8",to="ASCII//TRANSLIT"); #Sin acentos
 
-tweets_text.df2$text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$text)
-tweets_text.df2$text <- gsub("\\s+", " ",tweets_text.df2$text)
-tweets_text.df2$text <- gsub("\"", "",tweets_text.df2$text)
+tweets_text.df2$retweet_text <- gsub("\\w*[0-9]+\\w*\\s*", "",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- gsub("\\s+", " ",tweets_text.df2$retweet_text)
+tweets_text.df2$retweet_text <- gsub("\"", "",tweets_text.df2$retweet_text)
 
 
-tweets_text.df2$cantChars <- nchar(tweets_text.df2$text)
+tweets_text.df2$cantChars <- nchar(tweets_text.df2$retweet_text)
 # ggplot(tweets_text.df2, aes(x=cantChars)) +
 #   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
 #   ggtitle("Night price distribution of Airbnb appartements") +
@@ -142,10 +151,32 @@ update_text <- function(x) {
 
 
 ```{r}
-apply(tweets_text.df2[,c('status_id', 'text')], 1, update_text)
+#apply(tweets_text.df2[,c('status_id', 'text')], 1, update_text)
 ```
+
 ```{r}
-tweets_text.df2$sentiment <- ifelse(is.na(tweets_text.df2$text), 0, get_sentiment(method = "nrc", char_v = as.vector(tweets_text.df2$text), language = "spanish"))
+tweets_text.df2$polaridad <- ifelse(is.na(tweets_text.df2$retweet_text), 0, get_sentiment(method = "nrc", char_v = as.vector(tweets_text.df2$retweet_text), language = "spanish"))
+```
+
+```{r}
+tweets_text.df2$sentiment <- get_nrc_sentiment(char_v = as.vector(tweets_text.df2$retweet_text), language = "spanish")
+```
+
+```{r}
+
+#Empezamos transponiendo emocion.df
+emocion.df3 <- data.frame(t(tweets_text.df2$sentiment))
+
+#Sumamos los puntajes de cada uno de los tweets para cada emocion
+emocion.df3 <- data.frame(rowSums(emocion.df3))
+
+#Nombramos la columna de puntajes como cuenta
+names(emocion.df3)[1] <- "cuenta"
+
+#Dado que las emociones son los nombres de las filas y no una variable
+#transformamos el data frame para incluirlas dentro
+emocion.df3 <- cbind("sentimiento" = rownames(emocion.df3), emocion.df3)
+
 ```
 
 ```{r}
@@ -174,5 +205,19 @@ update_sentiment <- function(x) {
 
 
 ```{r}
-apply(tweets_text.df2[,c('status_id', 'sentiment')], 1, update_sentiment)
+#apply(tweets_text.df2[,c('status_id', 'sentiment')], 1, update_sentiment)
 ```
+
+
+```{r}
+#tweets_text.df2$cantChars <- NULL
+```
+
+```{r}
+# tweets_text.df2[['_id']] <- NULL
+# tweets_text.df2$cantChars <- NULL
+# tweets_text.df2$sentiment <- NULL
+# names(tweets_text.df2) <- c('retweet_status_id', 'text_limpio', 'polaridad')
+write.csv(tweets_text.df2, file = 'normalize-sentiment.csv', row.names = FALSE)
+```
+

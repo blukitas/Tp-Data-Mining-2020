@@ -1,0 +1,430 @@
+"rules","support","confidence","coverage","lift","count"
+"{RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0559751820879417,0.220988817433335,0.253294183561246,2.67411728836907,5395
+"{RT_popular=muy muchos} => {adherencia=muy_alta}",0.072897428980515,0.287797484946545,0.253294183561246,1.71979026561584,7026
+"{RT_popular=muy muchos} => {difusion=intermedia}",0.0565977049656575,0.223446524392742,0.253294183561246,1.12542970913572,5455
+"{RT_popular=muy muchos} => {1_resp=ahora}",0.0577182461455458,0.227870396919674,0.253294183561246,1.13937562751152,5563
+"{RT_popular=muy muchos} => {1_resp=tranqui}",0.0521466663899898,0.205873919632982,0.253294183561246,1.02939095881231,5026
+"{RT_popular=muy muchos} => {retweet_verified=Verificados}",0.161700317486668,0.638389382705935,0.253294183561246,2.845941049212,15585
+"{RT_popular=muy muchos} => {n_char=medio}",0.07882177170011,0.311186662843567,0.253294183561246,1.24539272259223,7597
+"{RT_popular=muy muchos} => {difusion=alta}",0.104417837355523,0.412239380657846,0.253294183561246,1.58334486277853,10064
+"{RT_popular=muy muchos} => {adherencia=alta}",0.0843103484053039,0.332855445869004,0.253294183561246,1.19367739186435,8126
+"{RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.118829241974643,0.469135296768115,0.253294183561246,1.02724397785184,11453
+"{retweet_source=TweetDeck,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0438048598285987,0.782576459684893,0.0559751820879417,3.4887273051503,4222
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0438048598285987,0.270901507860122,0.161700317486668,3.27809530829558,4222
+"{retweet_source=TweetDeck,RT_popular=muy muchos} => {n_char=medio}",0.0212280301301073,0.379240037071362,0.0559751820879417,1.51774750874111,2046
+"{n_char=medio,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0212280301301073,0.269316835592997,0.07882177170011,3.25891967961384,2046
+"{retweet_source=TweetDeck,RT_popular=muy muchos} => {adherencia=alta}",0.0205225042020294,0.36663577386469,0.0559751820879417,1.31481951021828,1978
+"{adherencia=alta,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0205225042020294,0.243416194929855,0.0843103484053039,2.94550404265276,1978
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0206366333962773,0.21535296665223,0.0958270216430454,2.60591960224423,1989
+"{retweet_source=TweetDeck,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0233549832956361,0.417238183503244,0.0559751820879417,1.06938573600345,2251
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0233549832956361,0.242460146488582,0.096325039945218,2.93393519634182,2251
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0260733331949949,0.219418492971274,0.118829241974643,2.65511527803607,2513
+"{polaridad=Neutro,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0282729140295906,0.219651781396099,0.128716980349028,2.65793822906702,2725
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0326201987923056,0.207812809835415,0.156969143616028,2.51467849812392,3144
+"{fecha_inicio_T_momento=Mañana,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0264053453964433,0.683404940923738,0.0386379199435579,3.04662049103199,2545
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Mañana}",0.0264053453964433,0.163298042990055,0.161700317486668,1.04564124232444,2545
+"{adherencia=muy_alta,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0273910066194933,0.375747224594364,0.072897428980515,1.87858019508528,2640
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0273910066194933,0.56701030927835,0.0483077753107427,3.38828120955211,2640
+"{adherencia=muy_alta,RT_popular=muy muchos} => {retweet_source=Twitter for iPhone}",0.023230478720093,0.318673498434387,0.072897428980515,1.44097532845897,2239
+"{retweet_source=Twitter for iPhone,RT_popular=muy muchos} => {adherencia=muy_alta}",0.023230478720093,0.582921114293153,0.0398518395551037,3.48335934266245,2239
+"{adherencia=muy_alta,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0397895872673321,0.545829775120979,0.072897428980515,2.43331014735015,3835
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0397895872673321,0.246069939043953,0.161700317486668,1.4704391385042,3835
+"{adherencia=muy_alta,RT_popular=muy muchos} => {polaridad=Positivo}",0.0202527442883526,0.277825220609166,0.072897428980515,1.10536018215697,1952
+"{polaridad=Positivo,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0202527442883526,0.313725490196078,0.0645556224191239,1.87472814161315,1952
+"{adherencia=muy_alta,RT_popular=muy muchos} => {difusion=alta}",0.0701168267933847,0.961855963563905,0.072897428980515,3.69433336575342,6758
+"{difusion=alta,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0701168267933847,0.671502384737679,0.104417837355523,4.01269408182696,6758
+"{n_char=corto,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0220891867776141,0.279763469119579,0.0789566516569484,1.67178142976522,2129
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0272768774252454,0.28464703334777,0.0958270216430454,1.70096412475198,2629
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0231267249071403,0.240090478242137,0.096325039945218,1.43470769879928,2229
+"{n_char=largo,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0319354236268183,0.334274543874891,0.095536510966778,1.99752303848656,3078
+"{adherencia=muy_alta,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0349339088211492,0.479220039851978,0.072897428980515,1.04932607585736,3367
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0349339088211492,0.293984108967083,0.118829241974643,1.75675964972815,3367
+"{polaridad=Neutro,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0345085181880434,0.268096082540706,0.128716980349028,1.60206067502253,3326
+"{adherencia=muy_alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0497707040733747,0.682749786507259,0.072897428980515,1.11956700619532,4797
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0497707040733747,0.317073170731707,0.156969143616028,1.89473286263646,4797
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {adherencia=muy_alta}",0.033107841713183,0.361381653454134,0.0916146168371688,2.15950688345318,3191
+"{difusion=intermedia,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0393849473968168,0.695875343721357,0.0565977049656575,3.10221356977575,3796
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=intermedia}",0.0393849473968168,0.243567532884184,0.161700317486668,1.22677288641531,3796
+"{difusion=intermedia,RT_popular=muy muchos} => {adherencia=alta}",0.0387935506629869,0.685426214482126,0.0565977049656575,2.45805735244145,3739
+"{adherencia=alta,RT_popular=muy muchos} => {difusion=intermedia}",0.0387935506629869,0.460127984248093,0.0843103484053039,2.31751961631478,3739
+"{difusion=intermedia,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0236143678280177,0.417231897341888,0.0565977049656575,1.06936962450754,2276
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {difusion=intermedia}",0.0236143678280177,0.245152951314089,0.096325039945218,1.23475813929528,2276
+"{n_char=largo,RT_popular=muy muchos} => {difusion=intermedia}",0.0202216181444668,0.211663770634231,0.095536510966778,1.06608369258301,1949
+"{difusion=intermedia,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0285219231806769,0.503941338221815,0.0565977049656575,1.10345716565179,2749
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {difusion=intermedia}",0.0285219231806769,0.240024447742949,0.118829241974643,1.20892748340097,2749
+"{polaridad=Neutro,RT_popular=muy muchos} => {difusion=intermedia}",0.0286568031375153,0.222634209253587,0.128716980349028,1.12133833383566,2762
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=intermedia}",0.0329833371376398,0.210126247603939,0.156969143616028,1.05833967373343,3179
+"{1_resp=ahora,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0408375007781536,0.707531907244293,0.0577182461455459,3.15417855152726,3936
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=ahora}",0.0408375007781536,0.252550529355149,0.161700317486668,1.26277885039987,3936
+"{1_resp=ahora,RT_popular=muy muchos} => {adherencia=baja}",0.0200971135689237,0.348193420816106,0.0577182461455458,1.26563502357437,1937
+"{adherencia=baja,RT_popular=muy muchos} => {1_resp=ahora}",0.0200971135689237,0.567868660216945,0.0353904255981407,2.83940222084611,1937
+"{1_resp=ahora,RT_popular=muy muchos} => {n_char=corto}",0.0202527442883526,0.350889807657739,0.0577182461455459,1.10941679050217,1952
+"{n_char=corto,RT_popular=muy muchos} => {1_resp=ahora}",0.0202527442883526,0.256504599211564,0.0789566516569484,1.28254960994028,1952
+"{1_resp=ahora,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0245585275258866,0.425489843609563,0.0577182461455458,1.09906901366218,2367
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {1_resp=ahora}",0.0245585275258866,0.256279774794283,0.0958270216430454,1.28142546452701,2367
+"{1_resp=ahora,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0246000290510676,0.426208880100665,0.0577182461455459,1.09237772322463,2371
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {1_resp=ahora}",0.0246000290510676,0.255385609651012,0.096325039945218,1.27695454603569,2371
+"{1_resp=ahora,RT_popular=muy muchos} => {polaridad=Neutro}",0.0304828702454815,0.528132302714363,0.0577182461455459,1.05181212109135,2938
+"{polaridad=Neutro,RT_popular=muy muchos} => {1_resp=ahora}",0.0304828702454815,0.236820893116234,0.128716980349028,1.1841290371617,2938
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=ahora}",0.0331182170944782,0.210985524489391,0.156969143616028,1.05494951345385,3192
+"{1_resp=tranqui,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0345396443319292,0.662355750099483,0.0521466663899898,2.95278315939354,3329
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=tranqui}",0.0345396443319292,0.213602823227462,0.161700317486668,1.06803627870457,3329
+"{1_resp=tranqui,RT_popular=muy muchos} => {difusion=alta}",0.0245066506194103,0.469956227616395,0.0521466663899898,1.8050259476418,2362
+"{difusion=alta,RT_popular=muy muchos} => {1_resp=tranqui}",0.0245066506194103,0.234697933227345,0.104417837355523,1.1735140174475,2362
+"{1_resp=tranqui,RT_popular=muy muchos} => {adherencia=alta}",0.0226287066049677,0.433943493832073,0.0521466663899898,1.55619667445017,2181
+"{adherencia=alta,RT_popular=muy muchos} => {1_resp=tranqui}",0.0226287066049677,0.268397735663303,0.0843103484053039,1.34201652618284,2181
+"{1_resp=tranqui,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0253574318856218,0.486271388778353,0.0521466663899898,1.24631854788553,2444
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {1_resp=tranqui}",0.0253574318856218,0.263248599741491,0.096325039945218,1.31627031232021,2444
+"{1_resp=tranqui,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0271523728497022,0.520692399522483,0.0521466663899898,1.14013619398814,2617
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {1_resp=tranqui}",0.0271523728497022,0.228499083209639,0.118829241974643,1.1425191241913,2617
+"{1_resp=rapida,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0345603950945197,0.679379971446053,0.0508704944906725,3.02867716965372,3331
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=rapida}",0.0345603950945197,0.213731151748476,0.161700317486668,1.06856706441652,3331
+"{1_resp=rapida,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0233342325330456,0.458698755863757,0.0508704944906725,1.17564960743679,2249
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {1_resp=rapida}",0.0233342325330456,0.242244722102542,0.096325039945218,1.21112308360241,2249
+"{1_resp=rapida,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0241953891805524,0.475627167040587,0.0508704944906725,1.04145892754404,2332
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0245792782884771,0.508805841924399,0.0483077753107427,2.26825738466038,2369
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {difusion=alta}",0.0330040879002303,0.683204467353952,0.0483077753107427,2.62407798567421,3181
+"{difusion=alta,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0330040879002303,0.316077106518283,0.104417837355523,1.58025436665863,3181
+"{n_char=largo,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0213629100869457,0.22360990443093,0.095536510966778,1.11795672833602,2059
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0239982569359424,0.496778350515464,0.0483077753107427,1.08777270098783,2313
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {polaridad=Neutro}",0.0254508103172792,0.526847079037801,0.0483077753107427,1.04925250897451,2453
+"{1_resp=desde el pasado,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0387624245191011,0.802405498281787,0.0483077753107427,1.31577737440487,3736
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0387624245191011,0.24694295723445,0.156969143616028,1.23461230958454,3736
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0237388724035608,0.259116647791619,0.0916146168371688,1.29547571052245,2288
+"{1_resp=hace un ratín,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0272042497561785,0.614483243496602,0.0442717519868855,2.73936743638712,2622
+"{1_resp=hace un ratín,RT_popular=muy muchos} => {difusion=alta}",0.0247037828640203,0.558003280993672,0.0442717519868855,2.14320045543684,2381
+"{difusion=alta,RT_popular=muy muchos} => {1_resp=hace un ratín}",0.0247037828640203,0.236585850556439,0.104417837355523,1.18283107419497,2381
+"{1_resp=hace un ratín,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0307837563030441,0.695336301851418,0.0442717519868855,1.14020626171876,2967
+"{retweet_source=Twitter for iPhone,RT_popular=muy muchos} => {difusion=alta}",0.0269967421302733,0.677427753189274,0.0398518395551037,2.60189055981065,2602
+"{difusion=alta,RT_popular=muy muchos} => {retweet_source=Twitter for iPhone}",0.0269967421302733,0.258545310015898,0.104417837355523,1.16908815716408,2602
+"{retweet_source=Twitter for iPhone,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0259488286194518,0.651132517573549,0.0398518395551037,1.06772129079017,2501
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_source=Twitter for iPhone}",0.0216741715258036,0.236579841449604,0.0916146168371688,1.06976487349734,2089
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0294660828785458,0.557518649391441,0.0528521923180677,2.48541917047391,2840
+"{difusion=baja,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0365317175406196,0.686622464898596,0.0532049552821066,3.06096421886478,3521
+"{polaridad=Negativo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0400800979435994,0.667646042170757,0.0600319561743894,2.97636729123506,3863
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.0547405117138055,0.338530638434392,0.161700317486668,1.35482539524077,5276
+"{n_char=medio,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0547405117138055,0.694484664999342,0.07882177170011,3.09601392146006,5276
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {polaridad=Positivo}",0.0420617957709946,0.260121912094963,0.161700317486668,1.03492549562587,4054
+"{polaridad=Positivo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0420617957709946,0.651558984249437,0.0645556224191239,2.90465115725852,4054
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0620344047643751,0.383638113570741,0.161700317486668,1.47349201650495,5979
+"{difusion=alta,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0620344047643751,0.594097774244833,0.104417837355523,2.64848897674679,5979
+"{adherencia=baja,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0209063933099541,0.590735854588097,0.0353904255981407,2.63350153269704,2015
+"{adherencia=intermedia,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0432134630947687,0.711722488038278,0.0607167313398767,3.17286016846,4165
+"{retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0578116245772032,0.357523259544434,0.161700317486668,1.2821404525008,5572
+"{adherencia=alta,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0578116245772032,0.685700221511199,0.0843103484053039,3.05685285613748,5572
+"{difusion=muy_baja,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0237699985474466,0.608014861995754,0.0390944367205495,2.71053137968893,2291
+"{n_char=corto,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0476333755265506,0.603285151116951,0.0789566516569484,2.68944631984061,4591
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0618268971384698,0.645192724122997,0.0958270216430454,2.87627035783639,5959
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0627710568363387,0.651658767772512,0.096325039945218,2.905095992389,6050
+"{n_char=largo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0593471810089021,0.621198957428323,0.095536510966778,2.76930610151973,5720
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0734680749517545,0.618265956517943,0.118829241974643,2.7562307780348,7081
+"{polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0795687991533689,0.618168628083186,0.128716980349028,2.75579688769258,7669
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0989292606503289,0.630246546367903,0.156969143616028,2.80964026975167,9535
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {difusion=alta}",0.0219439314394804,0.415194346289753,0.0528521923180677,1.59469440838842,2115
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0216637961445083,0.409893992932862,0.0528521923180677,1.0587838776527,2088
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {n_char=largo}",0.0256479425618891,0.48527679623086,0.0528521923180677,1.11843774777787,2472
+"{n_char=largo,RT_popular=muy muchos} => {retweet_source=Twitter Web App}",0.0256479425618891,0.268462206776716,0.095536510966778,1.12636794417349,2472
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {polaridad=Neutro}",0.0276400157705796,0.522968197879859,0.0528521923180677,1.04152744804332,2664
+"{retweet_source=Twitter Web App,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0349235334398539,0.660777385159011,0.0528521923180677,1.08353685857386,3366
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_source=Twitter Web App}",0.0233861094395219,0.255266138165345,0.0916146168371688,1.07100212992566,2254
+"{difusion=baja,RT_popular=muy muchos} => {adherencia=intermedia}",0.0316449129505509,0.594773790951638,0.0532049552821066,2.13375595620862,3050
+"{adherencia=intermedia,RT_popular=muy muchos} => {difusion=baja}",0.0316449129505509,0.521189336978811,0.0607167313398767,2.14791425478649,3050
+"{difusion=baja,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0213006577991741,0.400351014040562,0.0532049552821066,1.03413371841603,2053
+"{difusion=baja,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.021611919238032,0.406201248049922,0.0532049552821066,1.04109795744044,2083
+"{difusion=baja,RT_popular=muy muchos} => {polaridad=Neutro}",0.0281795355979332,0.529641185647426,0.0532049552821066,1.05481716613432,2716
+"{polaridad=Negativo,RT_popular=muy muchos} => {difusion=alta}",0.0260629578136997,0.434151399930868,0.0600319561743894,1.66750538886335,2512
+"{polaridad=Negativo,RT_popular=muy muchos} => {adherencia=alta}",0.0201801166192858,0.336156239198064,0.0600319561743894,1.20551460955454,1945
+"{n_char=largo,RT_popular=muy muchos} => {polaridad=Negativo}",0.0253574318856218,0.265421372719374,0.095536510966778,1.07649565500079,2444
+"{polaridad=Negativo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0381606524039758,0.635672312478396,0.0600319561743894,1.04236978446149,3678
+"{n_char=medio,RT_popular=muy muchos} => {polaridad=Positivo}",0.0208752671660684,0.264841384757141,0.07882177170011,1.0537024704092,2012
+"{polaridad=Positivo,RT_popular=muy muchos} => {n_char=medio}",0.0208752671660684,0.323368691738991,0.0645556224191239,1.29414612993346,2012
+"{n_char=medio,RT_popular=muy muchos} => {difusion=alta}",0.0300367288497852,0.381071475582467,0.07882177170011,1.46363397463893,2895
+"{difusion=alta,RT_popular=muy muchos} => {n_char=medio}",0.0300367288497852,0.287658982511924,0.104417837355523,1.15123315419442,2895
+"{adherencia=intermedia,RT_popular=muy muchos} => {n_char=medio}",0.0219128052955946,0.360902255639098,0.0607167313398767,1.44435831096655,2112
+"{n_char=medio,RT_popular=muy muchos} => {adherencia=alta}",0.026550600734577,0.336843490851652,0.07882177170011,1.2079792132484,2559
+"{adherencia=alta,RT_popular=muy muchos} => {n_char=medio}",0.026550600734577,0.314915087373862,0.0843103484053039,1.26031416149431,2559
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {n_char=medio}",0.0287398061878774,0.299913382416631,0.0958270216430454,1.20027619582609,2770
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {n_char=medio}",0.0306177502023199,0.317858681602757,0.096325039945218,1.27209464976278,2951
+"{n_char=medio,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0373098711377643,0.473344741345268,0.07882177170011,1.0364612049967,3596
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {n_char=medio}",0.0373098711377643,0.313978870165022,0.118829241974643,1.2565673489285,3596
+"{polaridad=Neutro,RT_popular=muy muchos} => {n_char=medio}",0.0382955323608143,0.297517330324037,0.128716980349028,1.19068701288425,3691
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=medio}",0.04820402149779,0.307092339216075,0.156969143616028,1.22900692763874,4646
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {n_char=medio}",0.0240916353675998,0.262967157417894,0.0916146168371688,1.05241458980407,2322
+"{polaridad=Positivo,RT_popular=muy muchos} => {difusion=alta}",0.0283766678425432,0.439569270331083,0.0645556224191239,1.68831455379973,2735
+"{difusion=alta,RT_popular=muy muchos} => {polaridad=Positivo}",0.0283766678425432,0.271760731319555,0.104417837355523,1.08123190117818,2735
+"{polaridad=Positivo,RT_popular=muy muchos} => {adherencia=alta}",0.0222551928783383,0.344744455159113,0.0645556224191239,1.23631344237035,2145
+"{adherencia=alta,RT_popular=muy muchos} => {polaridad=Positivo}",0.0222551928783383,0.263967511690869,0.0843103484053039,1.05022566405735,2145
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {polaridad=Positivo}",0.0251499242597165,0.261094355881086,0.096325039945218,1.03879447713233,2424
+"{n_char=largo,RT_popular=muy muchos} => {polaridad=Positivo}",0.0277022680583511,0.289965247610773,0.095536510966778,1.15366070155713,2670
+"{polaridad=Positivo,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0305866240584341,0.473802635808422,0.0645556224191239,1.03746383543829,2948
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {polaridad=Positivo}",0.0305866240584341,0.257399807910591,0.118829241974643,1.02409528528539,2948
+"{difusion=alta,RT_popular=muy muchos} => {adherencia=alta}",0.031686414475732,0.30345786963434,0.104417837355523,1.08825258189824,3054
+"{adherencia=alta,RT_popular=muy muchos} => {difusion=alta}",0.031686414475732,0.375830666994831,0.0843103484053039,1.44350487551988,3054
+"{n_char=corto,RT_popular=muy muchos} => {difusion=alta}",0.0285115477993816,0.361103810775296,0.0789566516569484,1.386941399942,2748
+"{retweet_source=Twitter for Android,RT_popular=muy muchos} => {difusion=alta}",0.0201697412379905,0.566929133858268,0.0355771824614555,2.17748321429535,1944
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {difusion=alta}",0.0383577846485858,0.400281507145951,0.0958270216430454,1.53741660244445,3697
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {difusion=alta}",0.0351932933535307,0.365359758724688,0.096325039945218,1.40328780845632,3392
+"{n_char=largo,RT_popular=muy muchos} => {difusion=alta}",0.0458799360876512,0.480234578627281,0.095536510966778,1.84450343338067,4422
+"{difusion=alta,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0510157498288062,0.488573131955485,0.104417837355523,1.0698061113691,4917
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {difusion=alta}",0.0510157498288062,0.429319828865799,0.118829241974643,1.64894810495511,4917
+"{polaridad=Neutro,RT_popular=muy muchos} => {difusion=alta}",0.0499782116992799,0.388279864581654,0.128716980349028,1.4913202322511,4817
+"{difusion=alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0692245440019921,0.662957074721781,0.104417837355523,1.08711109406459,6672
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0692245440019921,0.441007336902637,0.156969143616028,1.69383793517773,6672
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.042393807972443,0.462740656851642,0.0916146168371688,1.77731210602833,4086
+"{adherencia=baja,RT_popular=muy muchos} => {difusion=muy_baja}",0.0258139486626133,0.729404866608033,0.0353904255981407,2.44356968555493,2488
+"{difusion=muy_baja,RT_popular=muy muchos} => {adherencia=baja}",0.0258139486626133,0.660297239915074,0.0390944367205495,2.40008932634993,2488
+"{adherencia=baja,RT_popular=muy muchos} => {polaridad=Neutro}",0.0200659874250379,0.566989152741132,0.0353904255981407,1.12919823369141,1934
+"{adherencia=intermedia,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0253678072669171,0.417805878332194,0.0607167313398767,1.07084074366211,2445
+"{adherencia=intermedia,RT_popular=muy muchos} => {polaridad=Neutro}",0.032277811209562,0.531613123718387,0.0607167313398767,1.05874441760979,3111
+"{n_char=corto,RT_popular=muy muchos} => {adherencia=alta}",0.0240397584611234,0.304467805519054,0.0789566516569484,1.0918743872428,2317
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {adherencia=alta}",0.0300367288497852,0.313447379818103,0.0958270216430454,1.12407669897412,2895
+"{adherencia=alta,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0339274968355087,0.402412010829436,0.0843103484053039,1.03138610365012,3270
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {adherencia=alta}",0.0339274968355087,0.352218871176217,0.096325039945218,1.26311799530087,3270
+"{n_char=largo,RT_popular=muy muchos} => {adherencia=alta}",0.0337199892096035,0.352953953084275,0.095536510966778,1.26575412658761,3250
+"{adherencia=alta,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0431927123321782,0.512306177701206,0.0843103484053039,1.12177326985478,4163
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {adherencia=alta}",0.0431927123321782,0.36348554963765,0.118829241974643,1.30352225945736,4163
+"{polaridad=Neutro,RT_popular=muy muchos} => {adherencia=alta}",0.0418750389076799,0.325326454941158,0.128716980349028,1.16667712383311,4036
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0503828515697952,0.320972965827219,0.156969143616028,1.15106475637591,4856
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {adherencia=alta}",0.0265090992093959,0.289354473386183,0.0916146168371688,1.03767535548099,2555
+"{difusion=muy_baja,RT_popular=muy muchos} => {polaridad=Neutro}",0.0219128052955946,0.560509554140127,0.0390944367205495,1.11629366354239,2112
+"{n_char=corto,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.031925048245523,0.404336399474376,0.0789566516569484,1.03631833144899,3077
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {n_char=corto}",0.031925048245523,0.331430417923309,0.096325039945218,1.04789156738894,3077
+"{n_char=corto,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0374032495694217,0.473718791064389,0.0789566516569484,1.03728024445937,3605
+"{n_char=corto,RT_popular=muy muchos} => {polaridad=Neutro}",0.047965387727999,0.607490144546649,0.0789566516569484,1.20985876870948,4623
+"{polaridad=Neutro,RT_popular=muy muchos} => {n_char=corto}",0.047965387727999,0.372642269869418,0.128716980349028,1.1781920763205,4623
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {n_char=corto}",0.0313336515116931,0.342015855039638,0.0916146168371688,1.08135979990914,3020
+"{retweet_source=Twitter for Android,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.022680583511444,0.637503645377661,0.0355771824614555,1.04537278780458,2186
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {polaridad=Neutro}",0.0491585565769542,0.512992637505414,0.0958270216430454,1.02166042748314,4738
+"{fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0662156834263659,0.69099177132958,0.0958270216430454,1.13308213934511,6382
+"{retweet_es_finde=Finde,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0662156834263659,0.421838852534867,0.156969143616028,1.0896382570422,6382
+"{retweet_es_finde=Laborable,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0507044883899483,0.526389487289961,0.096325039945218,1.15261084499128,4887
+"{fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0507044883899483,0.426700427835502,0.118829241974643,1.09363756510148,4887
+"{n_char=largo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0617438940881077,0.64628583840139,0.095536510966778,1.05977374954153,5951
+"{polaridad=Neutro,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0608412359154199,0.472674512332742,0.128716980349028,1.0349936353603,5864
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0453611670228881,0.495130237825595,0.0916146168371688,1.08416390444843,4372
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {polaridad=Neutro}",0.0491585565769542,0.536579841449604,0.0916146168371688,1.06863598054749,4738
+"{retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0580502583469943,0.633635334088335,0.0916146168371688,1.03902956547803,5595
+"{fecha_inicio_T_momento=Noche,retweet_source=TweetDeck,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0202734950509431,0.777556705133307,0.0260733331949949,3.46634923007208,1954
+"{fecha_inicio_T_momento=Noche,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0202734950509431,0.275949724615167,0.0734680749517545,3.33918221693146,1954
+"{polaridad=Neutro,retweet_source=TweetDeck,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0219024299142993,0.774678899082569,0.0282729140295906,3.45351996537355,2111
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0219024299142993,0.275264050071717,0.0795687991533689,3.33088508148302,2111
+"{retweet_es_finde=Finde,retweet_source=TweetDeck,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0252225519287834,0.773218829516539,0.0326201987923056,3.44701097254686,2431
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_source=TweetDeck}",0.0252225519287834,0.254955427372837,0.0989292606503289,3.08513672329551,2431
+"{1_resp=desde el pasado,adherencia=muy_alta,RT_popular=muy muchos} => {difusion=alta}",0.0264572223029196,0.965909090909091,0.0273910066194933,3.70990077309317,2550
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0264572223029196,0.377330571174904,0.0701168267933847,1.88649627092954,2550
+"{1_resp=desde el pasado,difusion=alta,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0264572223029196,0.801634706067274,0.0330040879002303,4.79032526754145,2550
+"{1_resp=desde el pasado,adherencia=muy_alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0212695316552883,0.776515151515151,0.0273910066194933,1.27332261485502,2050
+"{adherencia=muy_alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0212695316552883,0.427350427350427,0.0497707040733747,2.13657479452686,2050
+"{1_resp=desde el pasado,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0212695316552883,0.548715203426124,0.0387624245191011,3.27895521958068,2050
+"{adherencia=muy_alta,retweet_source=Twitter for iPhone,RT_popular=muy muchos} => {difusion=alta}",0.0222966944035193,0.95980348369808,0.023230478720093,3.68645012217216,2149
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {retweet_source=Twitter for iPhone}",0.0222966944035193,0.317993489197988,0.0701168267933846,1.4379004680216,2149
+"{difusion=alta,retweet_source=Twitter for iPhone,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0222966944035193,0.825903151421983,0.0269967421302733,4.93534611819416,2149
+"{adherencia=muy_alta,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0386586707061485,0.971577574967405,0.0397895872673321,3.73167250460303,3726
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0386586707061485,0.551346552234389,0.0701168267933847,2.45790394992853,3726
+"{difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0386586707061485,0.623181133968891,0.0620344047643751,3.72394097924172,3726
+"{adherencia=muy_alta,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0272665020439501,0.685267275097784,0.0397895872673321,1.12369516151683,2628
+"{adherencia=muy_alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0272665020439501,0.547842401500938,0.0497707040733747,2.44228243947564,2628
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0272665020439501,0.275616151022548,0.0989292606503289,1.64699831780366,2628
+"{adherencia=muy_alta,n_char=corto,RT_popular=muy muchos} => {difusion=alta}",0.0208856425473636,0.945514325974636,0.0220891867776141,3.63156777580646,2013
+"{difusion=alta,n_char=corto,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0208856425473636,0.732532751091703,0.0285115477993816,4.37739299496066,2013
+"{adherencia=muy_alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {difusion=alta}",0.026311966964786,0.96462533282617,0.0272768774252454,3.70497006569108,2536
+"{difusion=alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.026311966964786,0.685961590478767,0.0383577846485858,4.09909789903432,2536
+"{adherencia=muy_alta,retweet_es_finde=Laborable,RT_popular=muy muchos} => {difusion=alta}",0.0219543068207757,0.949304620906236,0.0231267249071403,3.64612568630688,2116
+"{difusion=alta,retweet_es_finde=Laborable,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0219543068207757,0.623820754716981,0.0351932933535307,3.72776315835651,2116
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {n_char=largo}",0.0311157685044925,0.443770346256289,0.0701168267933847,1.02277609490599,2999
+"{adherencia=muy_alta,n_char=largo,RT_popular=muy muchos} => {difusion=alta}",0.0311157685044925,0.974333983105913,0.0319354236268183,3.74225942295824,2999
+"{difusion=alta,n_char=largo,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0311157685044925,0.678199909543193,0.0458799360876512,4.05271645369161,2999
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0333672262455645,0.475880437999408,0.0701168267933847,1.04201350331142,3216
+"{adherencia=muy_alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {difusion=alta}",0.0333672262455645,0.955152955152955,0.0349339088211492,3.66858819333514,3216
+"{difusion=alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0333672262455645,0.654057352043929,0.0510157498288062,3.90844787058702,3216
+"{adherencia=muy_alta,polaridad=Neutro,RT_popular=muy muchos} => {difusion=alta}",0.0328380817995061,0.951593505712568,0.0345085181880434,3.65491692307279,3165
+"{difusion=alta,polaridad=Neutro,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0328380817995061,0.657047955158813,0.0499782116992799,3.92631880551284,3165
+"{adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.048162519972609,0.686889612311335,0.0701168267933847,1.12635545559983,4642
+"{adherencia=muy_alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.048162519972609,0.967688138419846,0.0497707040733747,3.71673380717229,4642
+"{difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.048162519972609,0.695743405275779,0.0692245440019921,4.15755105011409,4642
+"{adherencia=muy_alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.0314581560872362,0.95017235976183,0.033107841713183,3.64945853106578,3032
+"{difusion=alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0314581560872362,0.742046010768478,0.042393807972443,4.4342413422957,3032
+"{adherencia=muy_alta,n_char=largo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0218920545330041,0.685510071474984,0.0319354236268183,1.12409329684914,2110
+"{n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0218920545330041,0.354562258443959,0.0617438940881077,2.11875625229994,2110
+"{adherencia=muy_alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.022836214230873,0.653697653697654,0.0349339088211492,1.07192757811197,2201
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.022836214230873,0.335211696618946,0.0681247535846942,2.00312317834505,2201
+"{adherencia=muy_alta,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0236973708783798,0.686710763680096,0.0345085181880434,1.12606218121059,2284
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0236973708783798,0.298406062189705,0.0794131684339399,1.78318389769782,2284
+"{adherencia=muy_alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0225042020294246,0.679724224381072,0.033107841713183,1.11460571642473,2169
+"{retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0225042020294246,0.387667560321716,0.0580502583469942,2.31658347070045,2169
+"{difusion=intermedia,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0274428835259696,0.696786090621707,0.0393849473968168,2.49879583964509,2645
+"{adherencia=alta,difusion=intermedia,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0274428835259696,0.707408397967371,0.0387935506629869,3.15362794694224,2645
+"{adherencia=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=intermedia}",0.0274428835259696,0.474694903086863,0.0578116245772032,2.39088859475951,2645
+"{difusion=intermedia,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0223693220725862,0.678200692041522,0.0329833371376398,3.02341993988649,2156
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=intermedia}",0.0223693220725862,0.226114315679077,0.0989292606503289,1.13886653291079,2156
+"{difusion=intermedia,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0229710941877114,0.696445423089022,0.0329833371376398,2.49757414675421,2214
+"{adherencia=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=intermedia}",0.0229710941877114,0.455930807248764,0.0503828515697952,2.29637975879235,2214
+"{1_resp=ahora,retweet_verified=Verificados,RT_popular=muy muchos} => {polaridad=Neutro}",0.0213110331804694,0.521849593495935,0.0408375007781536,1.03929966980732,2054
+"{1_resp=ahora,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0213110331804694,0.699115044247788,0.0304828702454815,3.11665616071648,2054
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=ahora}",0.0213110331804694,0.26783152953449,0.0795687991533689,1.33918543679151,2054
+"{1_resp=ahora,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0233861094395219,0.706140350877193,0.0331182170944782,3.14797499066816,2254
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=ahora}",0.0233861094395219,0.236392239119035,0.0989292606503289,1.18198572270029,2254
+"{1_resp=desde el pasado,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0203772488638957,0.829041789784719,0.0245792782884771,1.35945532747556,1964
+"{1_resp=desde el pasado,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0203772488638957,0.525695931477516,0.0387624245191011,2.34355343513719,1964
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0203772488638957,0.205977975878343,0.0989292606503289,1.02980440248503,1964
+"{1_resp=desde el pasado,difusion=alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0259695793820423,0.786859478151525,0.0330040879002303,1.29028514934754,2503
+"{1_resp=desde el pasado,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0259695793820423,0.669967880085653,0.0387624245191011,2.57323839238126,2503
+"{difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0259695793820423,0.375149880095923,0.0692245440019921,1.87559372047958,2503
+"{1_resp=desde el pasado,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0200763628063331,0.788830004076641,0.0254508103172792,1.29351640017209,1935
+"{1_resp=desde el pasado,retweet_es_finde=Finde,RT_popular=muy muchos} => {polaridad=Neutro}",0.0200763628063331,0.517933618843683,0.0387624245191011,1.03150073460878,1935
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0200763628063331,0.252808988764045,0.0794131684339399,1.26394003294202,1935
+"{difusion=baja,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=intermedia}",0.0225042020294246,0.61601817665436,0.0365317175406196,2.20997036783669,2169
+"{adherencia=intermedia,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=baja}",0.0225042020294246,0.520768307322929,0.0432134630947687,2.14617911644925,2169
+"{adherencia=intermedia,difusion=baja,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0225042020294246,0.711147540983607,0.0316449129505509,3.17029705342655,2169
+"{difusion=baja,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0217779253387562,0.689326765188834,0.0315930360440746,3.07301999456199,2099
+"{polaridad=Negativo,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0253885580295076,0.633445508672017,0.0400800979435994,1.03871829145459,2447
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {polaridad=Negativo}",0.0253885580295076,0.256633455689565,0.0989292606503289,1.04085363264903,2447
+"{polaridad=Negativo,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0253885580295076,0.665307232191408,0.0381606524039758,2.96594087202,2447
+"{fecha_inicio_T_momento=Tarde,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.0202942458135336,0.328242993790904,0.0618268971384698,1.31365345793942,1956
+"{fecha_inicio_T_momento=Tarde,n_char=medio,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0202942458135336,0.706137184115524,0.0287398061878774,3.14796087323878,1956
+"{retweet_es_finde=Laborable,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.0217260484322799,0.346115702479339,0.0627710568363387,1.38518139917633,2094
+"{n_char=medio,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0217260484322799,0.709589969501864,0.0306177502023199,3.16335339687922,2094
+"{fecha_inicio_T_momento=Noche,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.025326305741736,0.344725321282305,0.0734680749517545,1.37961698774368,2441
+"{fecha_inicio_T_momento=Noche,n_char=medio,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.025326305741736,0.67880978865406,0.0373098711377643,3.0261352937121,2441
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.0262704654396049,0.330160385969488,0.0795687991533689,1.32132700745385,2532
+"{n_char=medio,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0262704654396049,0.685992955838526,0.0382955323608143,3.05815786631031,2532
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=medio}",0.0330144632815256,0.33371788148925,0.0989292606503289,1.33556437543898,3182
+"{n_char=medio,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0330144632815256,0.68489022815325,0.04820402149779,3.05324190424915,3182
+"{polaridad=Positivo,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0253574318856218,0.643496577145866,0.0394056981594074,2.86870893147423,2444
+"{difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0212695316552883,0.342866700117076,0.0620344047643751,1.22957948692827,2050
+"{adherencia=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0212695316552883,0.367910983488873,0.0578116245772032,1.41308665061866,2050
+"{adherencia=alta,difusion=alta,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0212695316552883,0.671250818598559,0.031686414475732,2.99243739121953,2050
+"{fecha_inicio_T_momento=Tarde,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0232823556265693,0.376573250545394,0.0618268971384698,1.44635701897131,2244
+"{difusion=alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0232823556265693,0.606978631322694,0.0383577846485858,2.70591186143126,2244
+"{retweet_es_finde=Laborable,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0213317839430599,0.339834710743802,0.0627710568363387,1.30525022279864,2056
+"{difusion=alta,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0213317839430599,0.606132075471698,0.0351932933535307,2.70213791388128,2056
+"{difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=largo}",0.0281069079288664,0.453085800301054,0.0620344047643751,1.04424581182276,2709
+"{n_char=largo,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0281069079288664,0.473601398601399,0.0593471810089021,1.81902646050849,2709
+"{difusion=alta,n_char=largo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0281069079288664,0.612618724559023,0.0458799360876512,2.73105540751377,2709
+"{difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0293312029217074,0.47282154206389,0.0620344047643751,1.03531557959883,2827
+"{fecha_inicio_T_momento=Noche,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0293312029217074,0.399237395848044,0.0734680749517545,1.53340633962805,2827
+"{difusion=alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0293312029217074,0.574944071588367,0.0510157498288062,2.56310173486725,2827
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0278060218713038,0.349458860346851,0.0795687991533689,1.34221502661792,2680
+"{difusion=alta,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0278060218713038,0.556362881461491,0.0499782116992799,2.48026675490386,2680
+"{difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0407026208213152,0.656129787589898,0.0620344047643751,1.07591576956105,3923
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.0407026208213152,0.411431567907708,0.0989292606503289,1.58024218450947,3923
+"{difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0407026208213152,0.587979616306954,0.0692245440019921,2.62121421734028,3923
+"{adherencia=intermedia,retweet_verified=Verificados,RT_popular=muy muchos} => {polaridad=Neutro}",0.0229607188064161,0.531332533013205,0.0432134630947687,1.05818560175387,2213
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=intermedia}",0.0229607188064161,0.288564349980441,0.0795687991533689,1.03522702225172,2213
+"{adherencia=intermedia,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0229607188064161,0.711346833815493,0.0322778112095619,3.17118550123982,2213
+"{adherencia=intermedia,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0249009151086302,0.70443205165835,0.0353489240729597,3.14035938958997,2400
+"{fecha_inicio_T_momento=Tarde,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0206988856840489,0.334787716059742,0.0618268971384698,1.20060684809012,1995
+"{adherencia=alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0206988856840489,0.689119170984456,0.0300367288497852,3.07209453921479,1995
+"{adherencia=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0238115000726277,0.411880832735104,0.0578116245772032,1.05565479113615,2295
+"{retweet_es_finde=Laborable,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0238115000726277,0.379338842975207,0.0627710568363387,1.36037492051036,2295
+"{adherencia=alta,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0238115000726277,0.701834862385321,0.0339274968355087,3.12878111500564,2295
+"{n_char=largo,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.021809051482642,0.367482517482517,0.0593471810089021,1.31785607977378,2102
+"{adherencia=alta,n_char=largo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.021809051482642,0.646769230769231,0.0337199892096035,2.88329842738205,2102
+"{adherencia=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0287916830943537,0.49802584350323,0.0578116245772032,1.09050427899512,2775
+"{fecha_inicio_T_momento=Noche,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0287916830943537,0.391893800310691,0.0734680749517545,1.40539917627418,2775
+"{adherencia=alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0287916830943537,0.66658659620466,0.0431927123321782,2.97164427915807,2775
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0277126434396464,0.348285304472552,0.0795687991533689,1.24901154247929,2671
+"{adherencia=alta,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0277126434396464,0.66179385530228,0.0418750389076799,2.95027823134803,2671
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=alta}",0.0340001245045755,0.343681174619822,0.0989292606503289,1.23250033383717,3277
+"{adherencia=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0340001245045755,0.674835255354201,0.0503828515697952,3.00841681690789,3277
+"{n_char=corto,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0203046211948289,0.426268786756698,0.0476333755265506,1.09253126459737,1957
+"{retweet_es_finde=Laborable,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=corto}",0.0203046211948289,0.323471074380165,0.0627710568363387,1.02272631842636,1957
+"{n_char=corto,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0203046211948289,0.636009099772506,0.031925048245523,2.83532974349092,1957
+"{fecha_inicio_T_momento=Noche,n_char=corto,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.021414786993422,0.57253814147018,0.0374032495694217,2.55237609394907,2064
+"{n_char=corto,retweet_verified=Verificados,RT_popular=muy muchos} => {polaridad=Neutro}",0.0273495050943122,0.574166848181224,0.0476333755265506,1.14349311212734,2636
+"{polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {n_char=corto}",0.0273495050943122,0.3437214760725,0.0795687991533689,1.08675250317608,2636
+"{n_char=corto,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0273495050943122,0.570192515682457,0.047965387727999,2.54191928984767,2636
+"{n_char=corto,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0273287543317217,0.581072137657181,0.0470316034114254,2.5904206647398,2634
+"{n_char=largo,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0235728663028366,0.397202797202797,0.0593471810089021,1.02600166161927,2272
+"{fecha_inicio_T_momento=Tarde,n_char=largo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0235728663028366,0.624862486248625,0.0377248863895748,2.78563811977868,2272
+"{fecha_inicio_T_momento=Tarde,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.030700753252682,0.624525116082735,0.0491585565769542,2.78413412295496,2959
+"{fecha_inicio_T_momento=Tarde,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0425494386918719,0.688202718576942,0.0618268971384698,1.12850867553436,4101
+"{retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0425494386918719,0.430099632931306,0.0989292606503289,1.11097641093413,4101
+"{fecha_inicio_T_momento=Tarde,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0425494386918719,0.642588530241304,0.0662156834263659,2.86466085669368,4101
+"{n_char=largo,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0207507625905252,0.614062020264047,0.0337926168786703,2.73748962243707,2000
+"{retweet_es_finde=Laborable,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0321636820153141,0.512396694214876,0.0627710568363387,1.12197146970076,3100
+"{fecha_inicio_T_momento=Noche,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0321636820153141,0.43779127241915,0.0734680749517545,1.12206351331744,3100
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0321636820153141,0.634335993452016,0.0507044883899483,2.82787103241869,3100
+"{polaridad=Neutro,retweet_es_finde=Laborable,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0313751530368741,0.636363636363636,0.0493038119150879,2.83691026827012,3024
+"{fecha_inicio_T_momento=Noche,n_char=largo,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0267269822165965,0.605832549388523,0.0441161212674566,2.70080262604832,2576
+"{n_char=largo,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0259695793820423,0.611382510991695,0.0424768110228051,2.72554436514346,2503
+"{n_char=largo,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0385964184183769,0.65034965034965,0.0593471810089021,1.06643755210371,3720
+"{n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0385964184183769,0.625105024365653,0.0617438940881077,2.78671935515312,3720
+"{fecha_inicio_T_momento=Noche,polaridad=Neutro,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0360855761449233,0.593110504774898,0.0608412359154199,2.64408772762323,3478
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0413043929364404,0.606305208650624,0.0681247535846942,2.70290974191325,3981
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0481936461164948,0.606872223673896,0.0794131684339399,2.70543749593605,4645
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=medio}",0.02054325496462,0.301553457203777,0.0681247535846942,1.20683990002136,1980
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=medio}",0.0236454939719035,0.297752808988764,0.0794131684339399,1.19162941643296,2279
+"{difusion=alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0271108713245212,0.706789288612388,0.0383577846485858,1.15898676718851,2613
+"{fecha_inicio_T_momento=Tarde,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0271108713245212,0.409432779692886,0.0662156834263659,1.5725651618857,2613
+"{difusion=alta,n_char=largo,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0219646822020709,0.478742650384441,0.0458799360876512,1.04828075810149,2117
+"{fecha_inicio_T_momento=Noche,n_char=largo,RT_popular=muy muchos} => {difusion=alta}",0.0219646822020709,0.49788334901223,0.0441161212674566,1.91228950922518,2117
+"{difusion=alta,n_char=largo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.030700753252682,0.669154228855721,0.0458799360876512,1.09727313210222,2959
+"{difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=largo}",0.030700753252682,0.44349520383693,0.0692245440019921,1.0221419626536,2959
+"{n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.030700753252682,0.497227356746765,0.0617438940881077,1.90976994891076,2959
+"{difusion=alta,polaridad=Neutro,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0249735427776971,0.499688602864854,0.0499782116992799,1.09414514667788,2407
+"{fecha_inicio_T_momento=Noche,polaridad=Neutro,RT_popular=muy muchos} => {difusion=alta}",0.0249735427776971,0.410470668485675,0.0608412359154199,1.57655152506521,2407
+"{difusion=alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0319873005332946,0.627008338417734,0.0510157498288062,1.02816267712503,3083
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0319873005332946,0.469540054827901,0.0681247535846942,1.80342749519498,3083
+"{difusion=alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0216845469070988,0.511502692119432,0.042393807972443,1.12001391443886,2090
+"{fecha_inicio_T_momento=Noche,retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.0216845469070988,0.47804208600183,0.0453611670228881,1.83608242340912,2090
+"{difusion=alta,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0330663401880019,0.661615113140959,0.04997821169928,1.08491055744172,3187
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0330663401880019,0.416383590279592,0.07941316843394,1.59926210242798,3187
+"{difusion=alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {polaridad=Neutro}",0.0221825652092714,0.523250122369065,0.042393807972443,1.04208892022265,2138
+"{polaridad=Neutro,retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.0221825652092714,0.451245251160827,0.0491585565769542,1.73316010988216,2138
+"{difusion=alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0285219231806769,0.672785119921684,0.042393807972443,1.10322703486554,2749
+"{retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.0285219231806769,0.491331546023235,0.0580502583469943,1.88712509240501,2749
+"{adherencia=alta,fecha_inicio_T_momento=Tarde,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0203772488638957,0.678411053540587,0.0300367288497852,1.1124523906009,1964
+"{adherencia=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0203772488638957,0.404448105436573,0.0503828515697952,1.04471678230611,1964
+"{fecha_inicio_T_momento=Tarde,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0203772488638957,0.307740520213099,0.0662156834263659,1.10361091007512,1964
+"{n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0209271440725447,0.338934632834818,0.0617438940881077,1.21547841129206,2017
+"{adherencia=alta,polaridad=Neutro,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0216845469070988,0.517839444995045,0.0418750389076799,1.13388921070296,2090
+"{fecha_inicio_T_momento=Noche,polaridad=Neutro,RT_popular=muy muchos} => {adherencia=alta}",0.0216845469070988,0.356412005457026,0.0608412359154199,1.27815530249885,2090
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0234587371085887,0.344349680170576,0.0681247535846942,1.2348977107531,2261
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=alta}",0.0245377767632961,0.308988764044944,0.07941316843394,1.10808732907351,2365
+"{fecha_inicio_T_momento=Noche,n_char=corto,RT_popular=muy muchos} => {polaridad=Neutro}",0.023074848000664,0.616920943134535,0.0374032495694217,1.22864085837778,2224
+"{n_char=corto,polaridad=Neutro,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.023074848000664,0.481072896387627,0.047965387727999,1.0533831905771,2224
+"{fecha_inicio_T_momento=Noche,polaridad=Neutro,RT_popular=muy muchos} => {n_char=corto}",0.023074848000664,0.379263301500682,0.0608412359154199,1.19912595214666,2224
+"{n_char=corto,retweet_es_finde=Finde,RT_popular=muy muchos} => {polaridad=Neutro}",0.0285634247058579,0.607324067946173,0.0470316034114254,1.20952801563773,2753
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=corto}",0.0285634247058579,0.359681212437941,0.07941316843394,1.13721278759984,2753
+"{n_char=corto,retweet_verified=Sin verificar,RT_popular=muy muchos} => {polaridad=Neutro}",0.0206262580149821,0.658278145695364,0.0313336515116931,1.31100659651639,1988
+"{polaridad=Neutro,retweet_verified=Sin verificar,RT_popular=muy muchos} => {n_char=corto}",0.0206262580149821,0.419586323343183,0.0491585565769542,1.32661622544491,1988
+"{fecha_inicio_T_momento=Tarde,n_char=largo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0264364715403291,0.700770077007701,0.0377248863895748,1.14911651772217,2548
+"{n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0264364715403291,0.428163333893463,0.0617438940881077,1.10597481969608,2548
+"{fecha_inicio_T_momento=Tarde,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0339067460729182,0.689742507387083,0.0491585565769542,1.13103360748221,3268
+"{polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0339067460729182,0.426966292134831,0.0794131684339399,1.1028827799571,3268
+"{fecha_inicio_T_momento=Tarde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0236766201157893,0.695943885330894,0.0340208752671661,1.14120257168556,2282
+"{retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0236766201157893,0.407864164432529,0.0580502583469943,1.05354069349385,2282
+"{fecha_inicio_T_momento=Noche,retweet_es_finde=Laborable,RT_popular=muy muchos} => {polaridad=Neutro}",0.0262289639144239,0.517290771434418,0.0507044883899483,1.0302204593944,2528
+"{polaridad=Neutro,retweet_es_finde=Laborable,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0262289639144239,0.531986531986532,0.0493038119150879,1.1648664362843,2528
+"{fecha_inicio_T_momento=Noche,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Laborable}",0.0262289639144239,0.431105047748977,0.0608412359154199,1.10492665103422,2528
+"{n_char=largo,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0272146251374738,0.640693698094773,0.0424768110228051,1.05060380777805,2623
+"{n_char=largo,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0231578510510261,0.639724849527085,0.0361997053391712,1.04901509854398,2232
+"{fecha_inicio_T_momento=Noche,retweet_verified=Sin verificar,RT_popular=muy muchos} => {polaridad=Neutro}",0.0247556597704966,0.545745654162854,0.0453611670228881,1.08689033246253,2386
+"{polaridad=Neutro,retweet_verified=Sin verificar,RT_popular=muy muchos} => {fecha_inicio_T_momento=Noche}",0.0247556597704966,0.503588011819333,0.0491585565769542,1.10268350308224,2386
+"{polaridad=Neutro,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0312195223174452,0.63507809202195,0.0491585565769542,1.04139538706058,3009
+"{retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {polaridad=Neutro}",0.0312195223174452,0.537801608579088,0.0580502583469943,1.0710692145484,3009
+"{1_resp=desde el pasado,adherencia=muy_alta,difusion=alta,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0205328795833247,0.776078431372549,0.0264572223029196,1.27260648506302,1979
+"{1_resp=desde el pasado,adherencia=muy_alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0205328795833247,0.965365853658537,0.0212695316552883,3.70781428657516,1979
+"{adherencia=muy_alta,difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {1_resp=desde el pasado}",0.0205328795833247,0.426324859974149,0.048162519972609,2.13144738323625,1979
+"{1_resp=desde el pasado,difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0205328795833247,0.790651218537755,0.0259695793820423,4.72469128557914,1979
+"{adherencia=muy_alta,difusion=alta,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.026592102259758,0.687869028448739,0.0386586707061485,1.1279614934404,2563
+"{adherencia=muy_alta,retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {difusion=alta}",0.026592102259758,0.975266362252664,0.0272665020439501,3.74584054063267,2563
+"{adherencia=muy_alta,difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.026592102259758,0.552132701421801,0.048162519972609,2.4614086044605,2563
+"{difusion=alta,retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {adherencia=muy_alta}",0.026592102259758,0.653326535814428,0.0407026208213152,3.90408073500317,2563
+"{adherencia=muy_alta,difusion=alta,n_char=largo,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0214459131373078,0.689229743247749,0.0311157685044925,1.13019278142308,2067
+"{adherencia=muy_alta,difusion=alta,retweet_es_finde=Finde,RT_popular=muy muchos} => {n_char=largo}",0.0214459131373078,0.445282205945713,0.048162519972609,1.02626054122432,2067
+"{adherencia=muy_alta,n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0214459131373078,0.979620853080569,0.0218920545330041,3.7625654364235,2067
+"{difusion=alta,n_char=largo,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0214459131373078,0.698546806353498,0.030700753252682,4.17430332258434,2067
+"{adherencia=muy_alta,difusion=alta,fecha_inicio_T_momento=Noche,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0219958083459567,0.659203980099503,0.0333672262455645,1.08095680300033,2120
+"{adherencia=muy_alta,fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0219958083459567,0.963198546115402,0.022836214230873,3.69949000843607,2120
+"{difusion=alta,fecha_inicio_T_momento=Noche,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0219958083459567,0.687641907233214,0.0319873005332946,4.10913896106092,2120
+"{adherencia=muy_alta,difusion=alta,polaridad=Neutro,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0226598327488535,0.690047393364929,0.0328380817995061,1.13153355678749,2184
+"{adherencia=muy_alta,polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {difusion=alta}",0.0226598327488535,0.956217162872154,0.0236973708783798,3.6726756432591,2184
+"{difusion=alta,polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0226598327488535,0.685283966112331,0.0330663401880019,4.09504862185124,2184
+"{adherencia=muy_alta,difusion=alta,retweet_verified=Sin verificar,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0215704177128509,0.685686015831135,0.0314581560872362,1.12438180883401,2079
+"{adherencia=muy_alta,retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {difusion=alta}",0.0215704177128509,0.95850622406639,0.0225042020294246,3.68146755750246,2079
+"{difusion=alta,retweet_es_finde=Finde,retweet_verified=Sin verificar,RT_popular=muy muchos} => {adherencia=muy_alta}",0.0215704177128509,0.756275009094216,0.0285219231806769,4.51926950998318,2079
+"{fecha_inicio_T_momento=Tarde,polaridad=Neutro,retweet_verified=Verificados,RT_popular=muy muchos} => {retweet_es_finde=Finde}",0.0210516486480878,0.685704629942548,0.030700753252682,1.12441233208777,2029
+"{polaridad=Neutro,retweet_es_finde=Finde,retweet_verified=Verificados,RT_popular=muy muchos} => {fecha_inicio_T_momento=Tarde}",0.0210516486480878,0.436813778256189,0.0481936461164948,1.12831950194002,2029
+"{fecha_inicio_T_momento=Tarde,polaridad=Neutro,retweet_es_finde=Finde,RT_popular=muy muchos} => {retweet_verified=Verificados}",0.0210516486480878,0.620869033047736,0.0339067460729182,2.76783529802067,2029

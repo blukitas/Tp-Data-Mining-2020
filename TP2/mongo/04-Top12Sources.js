@@ -25,14 +25,14 @@ var top12Sources = db.tweets_mongo_covid19.aggregate([{
             }
         ]).toArray();
 
-db.tweets_lower.update({}, {
-    $set: {
-        "source_categorico": "NuevoCampo"
-    }
-}, {
-    upsert: false,
-    multi: true
-});
+// db.tweets_lower.update({}, {
+    // $set: {
+        // "source_categorico": "NuevoCampo"
+    // }
+// }, {
+    // upsert: false,
+    // multi: true
+// });
 
 db.tweets_mongo_covid19.aggregate([{
             "$project": {
@@ -48,7 +48,7 @@ db.tweets_mongo_covid19.aggregate([{
             }
         }
     ]).forEach(function (doc) {
-    db.tweets_lower.update({
+    db.tweets_mongo_covid19.update({
         _id: doc._id
     }, {
         $set: {
@@ -72,7 +72,7 @@ db.tweets_mongo_covid19.aggregate([{
             }
         }
     ]).forEach(function (doc) {
-    db.tweets_lower.update({
+    db.tweets_mongo_covid19.update({
         _id: doc._id
     }, {
         $set: {

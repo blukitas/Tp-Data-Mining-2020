@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 
-## Librerías
+# Librerías
 
 ```{r}
 library("ggplot2")
@@ -45,12 +45,10 @@ library('arulesViz')
 # Retweets:
 
 ```{r}
-# tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
-tweets <- mongo(collection = "query_compleja_RT_Tiempos", db = "DMUBA")
-```
-
-```{r}
-df_user_features = tweets$find()
+## tweets <- mongo(collection = "query_compleja_RT", db = "DMUBA")
+# tweets <- mongo(collection = "query_compleja_RT_Tiempos", db = "DMUBA")
+# df_user_features = tweets$find()
+df_user_features <- read.table("C:\\Users\\Lucas\\Desktop\\2019\\Maestria\\Data minning\\Grupo11\\Tp-Data-Mining-2020\\TP2\\Pruebas-Lucas\\normalize-sentiment.csv", header= TRUE, sep=",")
 ```
 
 
@@ -65,38 +63,170 @@ cat("Cant. de filas: ", nrow(df_user_features))
 names(df_user_features)
 ```
 
+# Tiempo primera respuesta
 
 ```{r}
-df_user_features$cat_RT_popular = arules::discretize(df_user_features$RT_followers_friends_ratio, breaks=5, labels=c("muy pocos", "pocos", "amigos medios", "muchos", "muy muchos"))
-#df_user_features$cat_activo = arules::discretize(df_user_features$postsXyear, breaks=5, labels=c("muy pocos", "pocos", "actividad normal", "muchos", "muy muchos"))
-#df_user_features$cat_RT_popular = arules::discretize(df_user_features$RT_followers_friends_ratio, breaks=5, labels=c("muy pocos", "pocos", "medio", "muchos", "muy muchos"))
-#df_user_features$cat_dateDifference = arules::discretize(df_user_features$dateDifference_m, breaks=5, labels=c("inmediato", "poco", "tiempo normal", "largo", "desde el pasado"))
 
-df_user_features$cat_vida_RT = arules::discretize(df_user_features$vida_RT, method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("muy corta", "corta","media","larga","muy larga") )
+library(infotheo)
 
-df_user_features$cat_n_char = arules::discretize(df_user_features$retweet_cant_caracteres, breaks=3, labels=c("corto", "medio", "largo"))
+bin_eq_freq <- discretize(df_user_features$tiempo_primera_rpta_RT_m,"equalfreq", 5)
+bin_eq_freq$tiempo_primera_rpta_RT_m = df_user_features$tiempo_primera_rpta_RT_m
 
-df_user_features$cat_cant_RT = discretize(log10(df_user_features$cant_RT),method = "fixed", breaks = c(-Inf, 1.5, 3, Inf), labels=c("baja", "media", "alta"))
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:5){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$tiempo_primera_rpta_RT_m[ bin_eq_freq$X==bin])
+}
 
-df_user_features$cat_duracion_RT = arules::discretize(df_user_features$duracion_RT,method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("muy poca", "poca","media","larga","muy larga") )
+table(bin_eq_freq$suavizado)
 
-df_user_features$cat_1_resp = arules::discretize(df_user_features$tiempo_primera_rpta_RT_m,method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("rapidisima","muy rapida", "rapida", "lenta", "muy lenta") )
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$tiempo_primera_rpta_RT_m) , type = "p", col="red", 
+     ylab = "tiempo_primera_rpta_RT_m", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
 
+# df_user_features$tiempo_primera_rpta_RT_m
+```
+```{r}
+hist(df_user_features$tiempo_primera_rpta_RT_m)
 
-df_user_features$cat_adherencia = arules::discretize(df_user_features$retweet_favorite_count,method = "fixed", c(-Inf,0.69, 1.69, 2.69, 3.69, Inf), labels = c("muy_baja", "baja", "intermedia", "alta", "muy_alta"))
+df_user_features$cat_1_resp <- arules::discretize(df_user_features$tiempo_primera_rpta_RT_m, breaks=5, labels=c("ahora","rapida", "tranqui", "hace un ratín", "desde el pasado") )
+ barplot(table(df_user_features$cat_1_resp)) 
 
-df_user_features$cat_difusion = arules::discretize(df_user_features$retweet_retweet_count,method = "fixed", c(-Inf,1, 2, 3, Inf), labels = c("muy_baja", "baja", "intermedia", "alta"))
+ df_user_features$cat_1_resp_2 <- arules::discretize(df_user_features$tiempo_primera_rpta_RT_m, method = "fixed", breaks=c(-Inf, 0.8, 1.75, 2.25, 2.8, Inf), labels=c("ahora","rapida", "tranqui", "Hace rato", "desde el pasado") )
+ barplot(table(df_user_features$cat_1_resp_2)) 
+ # 0.8 => 6' 20"
+ # 1.75 => 56' 15"
+ # 2.25 => 117.82' => 2hs 58'
+ # 2.8 => 630.95 => 10hs 30' 36"
+```
+# retweet_favorite_count
 
+```{r}
+bin_eq_freq <- discretize(df_user_features$retweet_favorite_count,"equalfreq", 5)
+bin_eq_freq$retweet_favorite_count = df_user_features$retweet_favorite_count
+
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:5){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$retweet_favorite_count[ bin_eq_freq$X==bin])
+}
+
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$retweet_favorite_count) , type = "p", col="red", 
+     ylab = "listed_count", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
+
+# df_user_features$retweet_favorite_count
+table(bin_eq_freq$suavizado)
 
 ```
 
+# retweet_retweet_count
+
+```{r}
+bin_eq_freq <- discretize(df_user_features$retweet_retweet_count,"equalfreq", 4)
+bin_eq_freq$retweet_retweet_count = df_user_features$retweet_retweet_count
+
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:4){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$retweet_retweet_count[ bin_eq_freq$X==bin])
+}
+
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$retweet_retweet_count) , type = "p", col="red", 
+     ylab = "listed_count", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
+
+# df_user_features$retweet_favorite_count
+table(bin_eq_freq$suavizado)
+
+```
+
+# RT_followers_friends_ratio
+
+```{r}
+
+library(infotheo)
+
+bin_eq_freq <- discretize(df_user_features$RT_followers_friends_ratio,"equalfreq", 4)
+bin_eq_freq$RT_followers_friends_ratio = df_user_features$RT_followers_friends_ratio
+
+# Por cada bin calculamos la media y reemplazamos en el atributo suavizado
+for(bin in 1:4){
+  bin_eq_freq$suavizado[ bin_eq_freq$X==bin] = mean(bin_eq_freq$RT_followers_friends_ratio[ bin_eq_freq$X==bin])
+}
+
+# grafico Sepal.Width ordenado de menor a mayor
+plot(sort(df_user_features$RT_followers_friends_ratio) , type = "p", col="red", 
+     ylab = "listed_count", xlab = "Observaciones", main = "Dato original vs suavizado")
+# Agrego la serie de la variable media 
+lines(sort(bin_eq_freq$suavizado),
+      type = "p", col="blue")
+legend("topleft", legend=c("Original", "Suavizado"), col=c("red", "blue"), lty=1)
+
+# df_user_features$retweet_favorite_count
+table(bin_eq_freq$suavizado)
+
+```
+
+# Variables descartadas:
+* vida_RT
+* cant_RT
+* Duracion_RT
+
+# Discretizaciones
+```{r}
+
+df_user_features$cat_RT_popular = arules::discretize(df_user_features$RT_followers_friends_ratio, method = "fixed", breaks = c(-Inf, 0.2, 1, 2, Inf),labels=c("pocos", "amigos medios", "muchos", "muy muchos"))
+
+df_user_features$cat_n_char = arules::discretize(df_user_features$retweet_cant_caracteres, breaks=3, labels=c("corto", "medio", "largo"))
+
+df_user_features$cat_adherencia = arules::discretize(df_user_features$retweet_favorite_count,method = "fixed", c(-Inf,0.5, 1.2, 2.2, Inf), labels = c("baja", "intermedia", "alta", "muy_alta"))
+
+df_user_features$cat_difusion = arules::discretize(df_user_features$retweet_retweet_count,method = "fixed", c(-Inf,0.4, 1.0, 1.5, Inf), labels = c("muy_baja", "baja", "intermedia", "alta"))
+
+```
+
+
+
+# Visualizacion de la discretizaciones
+
+
+```{r}
+ barplot(table(df_user_features$cat_RT_popular)) 
+ # 0.2 (Lo sigue uno por cada 5 amigos) | 1 | 2 
+ barplot(table(df_user_features$cat_adherencia)) 
+ # 0.5 (Le me gustean hasta 1 tweet por cada uno q crea) | 1.2 | 2.2
+ barplot(table(df_user_features$cat_difusion)) 
+ # 0.4 (Le retweetean hasta dos de cada 5 tweet) | 1.0 | 1.5
+ barplot(table(df_user_features$cat_1_resp)) 
+ # 0.8 => 6' 20"
+ # 1.75 => 56' 15"
+ # 2.25 => 117.82' => 2hs 58'
+ # 2.8 => 630.95 => 10hs 30' 36"
+```
+
+
+# Verificado como factor
 ```{r}
 df_user_features$cat_retweet_verified <- ifelse(df_user_features$cat_retweet_verified, "Verificados", "Sin verificar")
 df_user_features$cat_retweet_verified <- as.factor(df_user_features$cat_retweet_verified)
 ```
 
+# Polaridad como factor
+```{r}
+df_user_features$cat_polaridad <- ifelse(df_user_features$polaridad > 0, "Positivo", ifelse(df_user_features$polaridad < 0, "Negativo", "Neutro"))
+```
 
-
+#Categorias a usar
 ```{r}
 names(df_user_features) 
 
@@ -106,23 +236,24 @@ columnas_transacciones <- c(
   "cat_retweet_verified",
   "cat_retweet_source",
   "cat_n_char",
-  "cat_cant_RT",
   "cat_RT_popular",
-  "cat_duracion_RT",
-  "cat_vida_RT",
   "cat_1_resp",
   "cat_adherencia",
-  "cat_difusion"
+  "cat_difusion",
+  "cat_polaridad"
 )
+  #"cat_cant_RT",
+  # "cat_duracion_RT",
+  # "cat_vida_RT",
 ```
 
-
+# Armar tuplas 
 ```{r}
 
 df_user_tuples = df_user_features %>% 
   pivot_longer(
-    #cols = columnas_transacciones,
-    cols = starts_with("cat"),
+    cols = columnas_transacciones,
+    # cols = starts_with("cat"),
     names_to = "feat", 
     values_to = "val", 
     names_prefix = "cat_",
@@ -178,6 +309,8 @@ num_cols <- unlist(lapply(df_user_features, is.numeric))
 ```
 
 
+
+# Transacciones y reglas
 ```{r}
 
 # reglas de asociaciÃ³n
@@ -185,23 +318,44 @@ trans <- as(split(df_user_tuples$item, df_user_tuples$retweet_status_id), "trans
 #arules::inspect(trans[100])
 
 #trans <- as(df_user_features[columnas_transacciones], "transactions")
-rules = apriori(trans, parameter=list(target="rule",  minlen=4, support=0.05, confidence=0.05))
+rules = apriori(trans, parameter=list(target="rule",  minlen=2, support=0.02, confidence=0.05))
 #print(rules)
 #arules::inspect(sort(rules, by="lift", decreasing = TRUE))
 
 ```
 
 ```{r}
+summary(trans)
+```
+
+## Plot support/lift
+```{r}
 plot(rules, measure = c("support", "lift"), shading = "confidence")
 ```
 
-
+## Plot support/confidence/Order
 ```{r}
 plot(rules, method = "two-key plot")
 ```
 
+## Plot items más frecuentes
 ```{r}
-itemFrequencyPlot(trans, topN=10, type="absolute", main="Item Frequency") # plot frequeitemFrequencyPlot(Groceries, topN=10, type="absolute", main="Item Frequency") # plot freque
+library(RColorBrewer)
+itemFrequencyPlot(trans, 
+                  topN=10, 
+                  col=brewer.pal(10,'RdYlGn'), 
+                  type="relative", 
+                  main="Frecuencia de las caracteristicas",
+                  xlab = NULL, ylab = NULL) # plot
+
+png(filename="00-graf-items-frecuentes.png", width=1000, bg="white")
+itemFrequencyPlot(trans, 
+                  topN=10, 
+                  col=brewer.pal(10,'RdYlGn'), 
+                  type="relative", 
+                  main="Frecuencia de las caracteristicas",
+                  xlab = NULL, ylab = NULL) # plot
+dev.off()
 ```
 
 ```{r}
@@ -209,20 +363,105 @@ itemFrequencyPlot(trans, topN=10, type="absolute", main="Item Frequency") # plot
 ```
 
 
+
+
+# Resultados
+
+## Rules: lift > 1.3 y support > 0.1
 ```{r}
 # aux <- arules::subset(rules, subset=((rhs %pin% "mucha replica")))
-aux <- arules::subset(rules, subset=(lift > 2 & support > 0.1))
-arules::inspect(head(sort(aux, by="count", decreasing = TRUE), 5))
+aux <- arules::subset(rules, subset=(lift > 1.3 & support > 0.1))
+#data.frame(arules::inspect(head(sort(aux, by="count", decreasing = TRUE), 50)))
+write.csv(as(aux, "data.frame"), file = 'reglas.csv', row.names = FALSE)
+```
+
+
+
+
+```{r}
+as((head(sort(aux, by="count", decreasing = TRUE), 50)), "data.frame");
+```
+
+
+```{r}
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
 ```
 
 ```{r}
-arules::inspect(head(sort(aux, by="lift", decreasing = TRUE), 5))
+as(head(sort(aux, by="confidence", decreasing = TRUE), 50), "data.frame")
 ```
 
 ```{r}
-arules::inspect(head(sort(aux, by="confidence", decreasing = TRUE), 5))
+as(head(sort(aux, by="coverage", decreasing = TRUE), 50), "data.frame")
+```
+
+## Que hace la gente popular?
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (lhs %pin% "muy muchos")))
+# aux <- arules::subset(rules, subset=((rhs %pin% "largo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_lhs_RT_popular.csv', row.names = FALSE)
+```
+
+## Como son los RT de gente popular?
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (rhs %pin% "muy muchos")))
+# aux <- arules::subset(rules, subset=((rhs %pin% "largo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_RT_popular.csv', row.names = FALSE)
 ```
 
 ```{r}
-arules::inspect(head(sort(aux, by="coverage", decreasing = TRUE), 5))
+aux <- arules::subset(rules, subset=(lift > 1.02 & (rhs %pin% "largo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_consecuente_largo.csv', row.names = FALSE)
 ```
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (lhs %pin% "largo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_antecedente_largo.csv', row.names = FALSE)
+
+```
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (lhs %pin% "corto")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_corto.csv', row.names = FALSE)
+
+```
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (lhs %pin% "desde el pasado")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_pasado.csv', row.names = FALSE)
+
+```
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (rhs %pin% "positivo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+```
+
+
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (rhs %pin% "negativo")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+```
+```{r}
+aux <- arules::subset(rules, subset=(lift > 1.02 & (rhs %pin% "difusion=alta")))
+as(head(sort(aux, by="lift", decreasing = TRUE), 50), "data.frame")
+write.csv(as(aux, "data.frame"), file = 'reglas_difusion.csv', row.names = FALSE)
+```
+```
+
+
+# experimento con imbalance ratio
+```{r}
+quality(rules) <- cbind(quality(rules), 
+  imbalance = interestMeasure(rules, method = "imbalance",
+     transactions = trans))
+
+inspect(head(sort(rules, by = "imbalance")))
+
+```
+

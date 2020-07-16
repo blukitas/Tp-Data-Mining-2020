@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(mongolite)
+library(arules)
+library(arulesViz)
+library(sqldf)
+```
+
+#obtener los datos de mongodb
+```{r}
+tweets <- mongo(collection = "tweets_fechas_Stella", db = "DMUBA")
+
+df_tweets <- tweets$find()
+
+nrow(df_tweets)
+```
+#preprocesamiento 
+#se calcula por cada tweet retweeteado,
+#el tiempo entre la creacion del tweet y su primer RT -->tiempo_primera_rpta_RT
+#el tiempo entre el primer RT y el ultimo RT ---> duracion_RT
+#el tiempo entre la creacion del tweet y el ultimo RT ---> vida_RT
+#cantidad de RT ---> cant_RT
+
+
+## DiscretizacioneS
+
+#tiempo_primera_rpta_RT, hay tweet con fecha de creacion de 2017 y 2019
+```{r}
+hist(df_tweets_tot$tiempo_primera_rpta_RT)
+```
+
+
+```{r}
+hist(log10(df_tweets_tot$tiempo_primera_rpta_RT))
+```
+```{r}
+df_tweets_tot$cat_rpta = discretize(log10(df_tweets_tot$tiempo_primera_rpta_RT),method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("rapidisima","muy rapida", "rapida", "lenta", "muy lenta") )
+```
+#duracion_RT
+```{r}
+hist(df_tweets_tot$duracion_RT)
+```
+
+```{r}
+hist(log10(df_tweets_tot$duracion_RT))
+```
+
+```{r}
+df_tweets_tot$cat_duracion = discretize(log10(df_tweets_tot$duracion_RT),method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("muy poca", "poca","media","larga","muy larga") )
+```
+
+#vida_RT
+```{r}
+hist(df_tweets_tot$vida_RT)
+```
+
+```{r}
+hist(log10(df_tweets_tot$vida_RT))
+```
+```{r}
+df_tweets_tot$cat_vida = discretize(log10(df_tweets_tot$vida_RT),method = "fixed", breaks = c(-Inf, 1, 3, 4, 5, Inf), labels=c("muy corta", "corta","media","larga","muy larga") )
+```
+
+#cant_RT
+```{r}
+hist(df_tweets_tot$cant_RT)
+```
+
+```{r}
+hist(log10(df_tweets_tot$cant_RT))
+```
+```{r}
+df_tweets_tot$cat_cant = discretize(log10(df_tweets_tot$cant_RT),method = "fixed", breaks = c(-Inf, 1.5, 3, Inf), labels=c("baja", "media", "alta"))
+```
+
+## generación de reglas
+```{r}
+trans <- as(df_tweets_tot[c("cat_rpta", "cat_duracion","cat_vida")], "transactions")
+summary(trans)
+rules = apriori(trans, parameter=list(target="rule", support=0.005, confidence=0.05))
+print(rules)
+
+```
+
+
+## Scatter plot de support vs lift
+```{r}
+plot(rules, measure = c("support", "lift"), shading = "confidence")
+```
+
+#analisis de reglas
+```{r}
+inspect(sort(rules, by="lift", decreasing = TRUE))
+```
+
+#primer analisis
+#[45]  {cat_vida=larga}                            => {cat_rpta=lenta}         0.314447857 0.74617790 0.421411379  2.2535671 30309
+#[46]  {cat_rpta=lenta}                            => {cat_vida=larga}         0.314447857 0.94967883 0.331109682  2.2535671 30309
+#corresponderia a casos del tipo: un tweet que tuvo un solo retweet en promedio un dia despues de su creacion
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click t
+he *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
