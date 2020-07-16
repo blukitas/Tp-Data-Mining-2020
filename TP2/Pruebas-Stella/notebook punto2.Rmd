@@ -1,0 +1,210 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(mongolite)
+library(arules)
+library(arulesViz)
+library(sqldf)
+library(RColorBrewer)
+```
+#obtener datos de mongodb
+```{r}
+tweets <- mongo(collection = "tweets_tp2", db = "DMUBA")
+
+df_tweets = tweets$find()
+
+nrow(df_tweets)
+```
+##se calcula por cada tweet retweeteado,
+#el tiempo entre la creacion de tweet y su primer RT -->tiempo_primera_rpta_RT
+#el tiempo entre el primer RT y el ultimo RT ---> duracion_RT
+# el max de retweet_favorite_count para el tweet RT --->adhesion_RT
+# el max de retweet_retweet_count para el tweet RT ---->difusion_RT
+#cantidad de RT
+#en minutos y horas
+
+```{r}
+
+stringsqla = "select retweet_status_id,(min(created_at) - retweet_created_at)/60 as tiempo_primera_rpta_RT_min,(min(created_at) - retweet_created_at)/3600 as tiempo_primera_rpta_RT_hs, (max(created_at) - min(created_at))/60 as duracion_RT_min,(max(created_at) - min(created_at))/3600 as duracion_RT_hs, max(retweet_favorite_count) as adhesion_RT, max(retweet_retweet_count) as difusion_RT,count(*) as cant_RT from df_tweets group by retweet_status_id"
+
+df_tweets_tot = sqldf(stringsqla)
+
+nrow(df_tweets_tot)
+```
+#1 difusion
+#se agrega una columna on el valor de log10 
+
+```{r}
+df_tweets_tot$difusion_RTlog10 = log10(df_tweets_tot$difusion_RT)
+```
+#histogramas de analisis
+```{r}
+hist(df_tweets_tot$difusion_RT)
+```
+```{r}
+hist(df_tweets_tot$difusion_RTlog10)
+```
+#categorias de difusion
+```{r}
+df_tweets_tot$cat_difusion_RT <- cut(df_tweets_tot$difusion_RTlog10, c(-Inf,0.7, 1.7, 2.7, Inf), labels = c("muy baja", "baja", "media", "alta"))
+barplot(table(df_tweets_tot$cat_difusion_RT))
+```
+#2 adhesion
+#se agrega una columna on el valor de log10 
+```{r}
+df_tweets_tot$adhesion_RTlog10 = log10(df_tweets_tot$adhesion_RT + 0.0001 )
+```
+#histogramas de analisis
+```{r}
+hist(df_tweets_tot$adhesion_RT)
+```
+
+```{r}
+hist(df_tweets_tot$adhesion_RTlog10)
+```
+#categorias de difusion
+```{r}
+df_tweets_tot$cat_adhesion_RT <- cut(df_tweets_tot$adhesion_RTlog10, c(-Inf, 1, 2, 3, 4, Inf), labels = c("muy baja", "baja", "media", "alta", "muy alta"))
+
+barplot(table(df_tweets_tot$cat_adhesion_RT))
+
+```
+
+#3 primera rpta
+#se agrega una columna on el valor de log10 
+```{r}
+df_tweets_tot$tiempo_primera_rpta_RT_minlog10 = log10(df_tweets_tot$tiempo_primera_rpta_RT_min)
+```
+#histogramas de analisis
+```{r}
+hist(df_tweets_tot$tiempo_primera_rpta_RT_min)
+```
+
+```{r}
+hist(df_tweets_tot$tiempo_primera_rpta_RT_minlog10)
+```
+
+#categorias de primera respuesta
+
+```{r}
+df_tweets_tot$cat_rpta <- cut(df_tweets_tot$tiempo_primera_rpta_RT_minlog10, c(-Inf,1, 2, 3, 4, Inf),labels = c("rapidisima","muy rapida", "rapida", "menos rapida", "lenta"))
+barplot(table(df_tweets_tot$cat_rpta), las=2)
+
+```
+
+#4- actividad
+#se calcula el cociente entre la cantidad de RT sobre la duracion del RT (Ultimo RT menos primer RT) --> Actividad
+#se agrega una columna on el valor de log10 
+```{r}
+df_tweets_tot$actividad = df_tweets_tot$cant_RT/(df_tweets_tot$duracion_RT_min + 0.0001)
+
+df_tweets_tot$actividadlog10 = log10(df_tweets_tot$actividad)
+```
+#histograma de analisis
+
+```{r}
+hist(df_tweets_tot$actividadlog10)
+```
+
+#categorias de actividad
+```{r}
+df_tweets_tot$cat_actividad <- cut(df_tweets_tot$actividadlog10, c(-Inf,-2, 0, Inf), labels = c("baja", "media","alta"))
+
+barplot(table(df_tweets_tot$cat_actividad))
+```
+
+#5 anio de creacion de la cuenta del usuario que RT
+#se obtiene el anio para cada usuario que RT y se guarda en un nueva columna
+```{r}
+fecha_creacion_cuenta <- as.Date(df_tweets$account_created_at)
+class(fecha_creacion_cuenta)
+year_creacion_cuenta <- as.numeric(format(fecha_creacion_cuenta, "%Y"))
+df_tweets$created_at_year <- year_creacion_cuenta
+```
+#preprocesamiento para obtener una dataset , en el cual las filas son los tweets y las columnas los anios
+#por cada tweet se identifica el anio de creacion de la cuenta del usuario y se completa con 1 en la columna correspondiente del anio
+#un tweet puede ser RT por cuentas creadas en el mismo anio, en este caso se completa una sola vez con 1
+#si un anio no se enuentra entre los anios de la creacion de las cuentas se completa con 0
+
+```{r}
+stringsqlb = "select retweet_status_id , (CASE WHEN created_at_year = 2006 THEN 1 else 0 end) AS ANIO2006,(CASE WHEN created_at_year = 2007 THEN 1 else 0 end) AS ANIO2007, (CASE WHEN created_at_year = 2008 THEN 1 else 0 end) AS ANIO2008,(CASE WHEN created_at_year = 2009 THEN 1 else 0 end) AS ANIO2009, (CASE WHEN created_at_year = 2010 THEN 1 else 0 end) AS ANIO2010, (CASE WHEN created_at_year = 2011 THEN 1 else 0 end) AS ANIO2011, (CASE WHEN created_at_year = 2012 THEN 1 else 0 end) AS ANIO2012, (CASE WHEN created_at_year = 2013 THEN 1 else 0 end) AS ANIO2013, (CASE WHEN created_at_year = 2014 THEN 1 else 0 end) AS ANIO2014, (CASE WHEN created_at_year = 2015 THEN 1 else 0 end) AS ANIO2015, (CASE WHEN created_at_year = 2016 THEN 1 else 0 end) AS ANIO2016,(CASE WHEN created_at_year = 2017 THEN 1 else 0 end) AS ANIO2017, (CASE WHEN created_at_year = 2018 THEN 1 else 0 end) AS ANIO2018,(CASE WHEN created_at_year = 2019 THEN 1 else 0 end) AS ANIO2019, (CASE WHEN created_at_year = 2020 THEN 1 else 0 end) AS ANIO2020 from df_tweets"
+
+
+df_tweets_fechas = sqldf(stringsqlb)
+nrow(df_tweets_fechas)
+```
+#se agrupa el resultado anterior por tweet y se suman los valores por columna de anio
+
+```{r}
+stringsqld = "select retweet_status_id ,sum(ANIO2006), sum(ANIO2007),sum(ANIO2008), sum(ANIO2009), sum(ANIO2010),sum(ANIO2011), sum(ANIO2012),sum(ANIO2013), sum(ANIO2014),sum(ANIO2015), sum(ANIO2016), sum(ANIO2017),  sum(ANIO2018), sum(ANIO2019),sum(ANIO2020)  from df_tweets_fechas group by retweet_status_id"
+
+df_tweets_fechas1 = sqldf(stringsqld)
+nrow(df_tweets_fechas1)
+```
+#categorias de los anios --> "Si" si en el resultado anterior la suma es mayor a 0 y "na" en caso contrario
+```{r}
+df_tweets_fechas1$cat_2006= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2006)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2007= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2007)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2008= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2008)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2009= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2009)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2010= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2010)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2011= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2011)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2012= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2012)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2013= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2013)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2014= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2014)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2015= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2015)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2016= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2016)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2017= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2017)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2018= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2018)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2019= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2019)` > 0, "SI", NA))
+df_tweets_fechas1$cat_2020= as.factor(ifelse(df_tweets_fechas1$`sum(ANIO2020)` > 0, "SI", NA))
+
+```
+#se unen los dataset de anios con el de las otras categorias
+```{r}
+df_tweets_cat = cbind(df_tweets_tot,df_tweets_fechas1)
+```
+
+# generación de reglas
+
+```{r}
+trans <- as(df_tweets_cat[c("cat_actividad","cat_rpta", "cat_difusion_RT", "cat_adhesion_RT","cat_2006","cat_2007","cat_2008","cat_2009","cat_2010","cat_2011","cat_2012","cat_2013","cat_2014","cat_2015","cat_2016","cat_2017","cat_2018","cat_2019","cat_2020")], "transactions")
+
+
+summary(trans)
+```
+```{r}
+rules = apriori(trans, parameter=list(target="rule", support=0.002, confidence=0.6,  minlen=2))
+
+print(rules)
+```
+
+#analisis de reglas
+```{r}
+difusion_rules = subset(rules, subset =  (lhs %pin% "cat_actividad=alta") & (lift > 1) & (rhs %pin% "alta"))
+print(difusion_rules)  
+
+inspect(sort(difusion_rules, by="lift", decreasing = TRUE))
+```
+```{r}
+difusion_rules = subset(rules, subset = (lhs %pin% "rapida") & (lift > 18) & (rhs %pin% "alta"))
+  
+print(difusion_rules)  
+
+inspect(head(difusion_rules, 20))
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
